@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.2-apache
 
 WORKDIR /var/www/html
 
@@ -9,3 +9,8 @@ RUN apt-get update \
         unzip \
     && docker-php-ext-install zip pdo_mysql \
     && a2enmod rewrite
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Configuration personnalisée pour Apache
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
