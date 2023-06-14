@@ -2,7 +2,7 @@
     "name": "myprojects",
     "type": "project",
     "license": "proprietary",
-    "description": "Projects and Tasks Manager application",
+    "description": "projects and tasks manager application",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
