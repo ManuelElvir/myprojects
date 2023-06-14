@@ -1,8 +1,8 @@
 {
-    "name": "myprojects",
+    "name": "manuel-njiakim/my-projects",
     "type": "project",
     "license": "proprietary",
-    "description": "projects and tasks manager application",
+    "description": "Projects and tasks manager application",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
