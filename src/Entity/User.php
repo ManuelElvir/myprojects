@@ -46,22 +46,38 @@ class User
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Teammate::class, orphanRemoval: true)]
     private Collection $teammates;
 
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Project::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Project::class)]
+    private Collection $ownedProjects;
+
+    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'users')]
     private Collection $projects;
 
-    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'members')]
-    private Collection $projectsIn;
-
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Milestone::class)]
-    private Collection $milestones;
+    private Collection $ownedMilestones;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: File::class)]
+    private Collection $files;
+
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Task::class)]
+    private Collection $ownedTasks;
+
+    #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: Task::class)]
+    private Collection $assignedTasks;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Comment::class)]
+    private Collection $comments;
 
     public function __construct()
     {
         $this->teams = new ArrayCollection();
         $this->teammates = new ArrayCollection();
+        $this->ownedProjects = new ArrayCollection();
         $this->projects = new ArrayCollection();
-        $this->projectsIn = new ArrayCollection();
-        $this->milestones = new ArrayCollection();
+        $this->ownedMilestones = new ArrayCollection();
+        $this->files = new ArrayCollection();
+        $this->ownedTasks = new ArrayCollection();
+        $this->assignedTasks = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -228,27 +244,27 @@ class User
     /**
      * @return Collection<int, Project>
      */
-    public function getProjects(): Collection
+    public function getOwnedProjects(): Collection
     {
-        return $this->projects;
+        return $this->ownedProjects;
     }
 
-    public function addProject(Project $project): self
+    public function addOwnedProject(Project $ownedProject): self
     {
-        if (!$this->projects->contains($project)) {
-            $this->projects->add($project);
-            $project->setOwner($this);
+        if (!$this->ownedProjects->contains($ownedProject)) {
+            $this->ownedProjects->add($ownedProject);
+            $ownedProject->setOwner($this);
         }
 
         return $this;
     }
 
-    public function removeProject(Project $project): self
+    public function removeOwnedProject(Project $ownedProject): self
     {
-        if ($this->projects->removeElement($project)) {
+        if ($this->ownedProjects->removeElement($ownedProject)) {
             // set the owning side to null (unless already changed)
-            if ($project->getOwner() === $this) {
-                $project->setOwner(null);
+            if ($ownedProject->getOwner() === $this) {
+                $ownedProject->setOwner(null);
             }
         }
 
@@ -258,25 +274,25 @@ class User
     /**
      * @return Collection<int, Project>
      */
-    public function getProjectsIn(): Collection
+    public function getProjects(): Collection
     {
-        return $this->projectsIn;
+        return $this->projects;
     }
 
-    public function addProjectsIn(Project $projectsIn): self
+    public function addProject(Project $project): self
     {
-        if (!$this->projectsIn->contains($projectsIn)) {
-            $this->projectsIn->add($projectsIn);
-            $projectsIn->addMember($this);
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
+            $project->addUser($this);
         }
 
         return $this;
     }
 
-    public function removeProjectsIn(Project $projectsIn): self
+    public function removeProject(Project $project): self
     {
-        if ($this->projectsIn->removeElement($projectsIn)) {
-            $projectsIn->removeMember($this);
+        if ($this->projects->removeElement($project)) {
+            $project->removeUser($this);
         }
 
         return $this;
@@ -285,27 +301,147 @@ class User
     /**
      * @return Collection<int, Milestone>
      */
-    public function getMilestones(): Collection
+    public function getOwnedMilestones(): Collection
     {
-        return $this->milestones;
+        return $this->ownedMilestones;
     }
 
-    public function addMilestone(Milestone $milestone): self
+    public function addOwnedMilestone(Milestone $ownedMilestone): self
     {
-        if (!$this->milestones->contains($milestone)) {
-            $this->milestones->add($milestone);
-            $milestone->setOwner($this);
+        if (!$this->ownedMilestones->contains($ownedMilestone)) {
+            $this->ownedMilestones->add($ownedMilestone);
+            $ownedMilestone->setOwner($this);
         }
 
         return $this;
     }
 
-    public function removeMilestone(Milestone $milestone): self
+    public function removeOwnedMilestone(Milestone $ownedMilestone): self
     {
-        if ($this->milestones->removeElement($milestone)) {
+        if ($this->ownedMilestones->removeElement($ownedMilestone)) {
             // set the owning side to null (unless already changed)
-            if ($milestone->getOwner() === $this) {
-                $milestone->setOwner(null);
+            if ($ownedMilestone->getOwner() === $this) {
+                $ownedMilestone->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, File>
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files->add($file);
+            $file->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): self
+    {
+        if ($this->files->removeElement($file)) {
+            // set the owning side to null (unless already changed)
+            if ($file->getOwner() === $this) {
+                $file->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getOwnedTasks(): Collection
+    {
+        return $this->ownedTasks;
+    }
+
+    public function addOwnedTask(Task $ownedTask): self
+    {
+        if (!$this->ownedTasks->contains($ownedTask)) {
+            $this->ownedTasks->add($ownedTask);
+            $ownedTask->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOwnedTask(Task $ownedTask): self
+    {
+        if ($this->ownedTasks->removeElement($ownedTask)) {
+            // set the owning side to null (unless already changed)
+            if ($ownedTask->getCreatedBy() === $this) {
+                $ownedTask->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getAssignedTasks(): Collection
+    {
+        return $this->assignedTasks;
+    }
+
+    public function addAssignedTask(Task $assignedTask): self
+    {
+        if (!$this->assignedTasks->contains($assignedTask)) {
+            $this->assignedTasks->add($assignedTask);
+            $assignedTask->setAssignedTo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssignedTask(Task $assignedTask): self
+    {
+        if ($this->assignedTasks->removeElement($assignedTask)) {
+            // set the owning side to null (unless already changed)
+            if ($assignedTask->getAssignedTo() === $this) {
+                $assignedTask->setAssignedTo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getOwner() === $this) {
+                $comment->setOwner(null);
             }
         }
 

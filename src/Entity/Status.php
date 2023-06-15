@@ -24,9 +24,13 @@ class Status
     #[ORM\OneToMany(mappedBy: 'status', targetEntity: Project::class)]
     private Collection $projects;
 
+    #[ORM\OneToMany(mappedBy: 'status', targetEntity: Milestone::class)]
+    private Collection $milestones;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
+        $this->milestones = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,6 +86,36 @@ class Status
             // set the owning side to null (unless already changed)
             if ($project->getStatus() === $this) {
                 $project->setStatus(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Milestone>
+     */
+    public function getMilestones(): Collection
+    {
+        return $this->milestones;
+    }
+
+    public function addMilestone(Milestone $milestone): self
+    {
+        if (!$this->milestones->contains($milestone)) {
+            $this->milestones->add($milestone);
+            $milestone->setStatus($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMilestone(Milestone $milestone): self
+    {
+        if ($this->milestones->removeElement($milestone)) {
+            // set the owning side to null (unless already changed)
+            if ($milestone->getStatus() === $this) {
+                $milestone->setStatus(null);
             }
         }
 

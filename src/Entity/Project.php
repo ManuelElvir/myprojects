@@ -22,33 +22,43 @@ class Project
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?int $progress = null;
+    #[ORM\Column(nullable: true)]
+    private ?float $progress = null;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?Status $status = null;
 
-    #[ORM\ManyToOne(inversedBy: 'projects')]
+    #[ORM\ManyToOne(inversedBy: 'ownedProjects')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
+
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'projects')]
+    private Collection $users;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?Team $team = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'projectsIn')]
-    private Collection $members;
-
-    #[ORM\ManyToMany(targetEntity: Status::class)]
-    private Collection $pstatus;
+    #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist', 'remove'])]
+    private ?ProjectSetting $projectSetting = null;
 
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'projects')]
     private Collection $tags;
 
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Milestone::class)]
+    private Collection $milestones;
+
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class)]
+    private Collection $tasks;
+
+    #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist', 'remove'])]
+    private ?Discussion $discussion = null;
+
     public function __construct()
     {
-        $this->members = new ArrayCollection();
-        $this->pstatus = new ArrayCollection();
+        $this->users = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->milestones = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,12 +90,12 @@ class Project
         return $this;
     }
 
-    public function getProgress(): ?int
+    public function getProgress(): ?float
     {
         return $this->progress;
     }
 
-    public function setProgress(int $progress): self
+    public function setProgress(?float $progress): self
     {
         $this->progress = $progress;
 
@@ -116,6 +126,30 @@ class Project
         return $this;
     }
 
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        $this->users->removeElement($user);
+
+        return $this;
+    }
+
     public function getTeam(): ?Team
     {
         return $this->team;
@@ -128,50 +162,24 @@ class Project
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getMembers(): Collection
+    public function getProjectSetting(): ?ProjectSetting
     {
-        return $this->members;
+        return $this->projectSetting;
     }
 
-    public function addMember(User $member): self
+    public function setProjectSetting(?ProjectSetting $projectSetting): self
     {
-        if (!$this->members->contains($member)) {
-            $this->members->add($member);
+        // unset the owning side of the relation if necessary
+        if ($projectSetting === null && $this->projectSetting !== null) {
+            $this->projectSetting->setProject(null);
         }
 
-        return $this;
-    }
-
-    public function removeMember(User $member): self
-    {
-        $this->members->removeElement($member);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Status>
-     */
-    public function getPstatus(): Collection
-    {
-        return $this->pstatus;
-    }
-
-    public function addPstatus(Status $pstatus): self
-    {
-        if (!$this->pstatus->contains($pstatus)) {
-            $this->pstatus->add($pstatus);
+        // set the owning side of the relation if necessary
+        if ($projectSetting !== null && $projectSetting->getProject() !== $this) {
+            $projectSetting->setProject($this);
         }
 
-        return $this;
-    }
-
-    public function removePstatus(Status $pstatus): self
-    {
-        $this->pstatus->removeElement($pstatus);
+        $this->projectSetting = $projectSetting;
 
         return $this;
     }
@@ -196,6 +204,88 @@ class Project
     public function removeTag(Tag $tag): self
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Milestone>
+     */
+    public function getMilestones(): Collection
+    {
+        return $this->milestones;
+    }
+
+    public function addMilestone(Milestone $milestone): self
+    {
+        if (!$this->milestones->contains($milestone)) {
+            $this->milestones->add($milestone);
+            $milestone->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMilestone(Milestone $milestone): self
+    {
+        if ($this->milestones->removeElement($milestone)) {
+            // set the owning side to null (unless already changed)
+            if ($milestone->getProject() === $this) {
+                $milestone->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getProject() === $this) {
+                $task->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDiscussion(): ?Discussion
+    {
+        return $this->discussion;
+    }
+
+    public function setDiscussion(?Discussion $discussion): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($discussion === null && $this->discussion !== null) {
+            $this->discussion->setProject(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($discussion !== null && $discussion->getProject() !== $this) {
+            $discussion->setProject($this);
+        }
+
+        $this->discussion = $discussion;
 
         return $this;
     }

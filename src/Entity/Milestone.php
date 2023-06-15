@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MilestoneRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -20,21 +22,38 @@ class Milestone
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?int $progress = null;
-
-    #[ORM\Column]
-    private ?int $status = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $planned_start_date = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $planned_end_date = null;
+    #[ORM\ManyToOne(inversedBy: 'milestones')]
+    private ?Status $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'milestones')]
-    #[ORM\JoinColumn(nullable: false)]
+    private ?Project $project = null;
+
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private array $dependencies = [];
+
+    #[ORM\ManyToOne(inversedBy: 'ownedMilestones')]
     private ?User $owner = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $planned_start_date = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $planned_end_date = null;
+
+    #[ORM\OneToMany(mappedBy: 'milestone', targetEntity: Task::class)]
+    private Collection $tasks;
+
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'milestones')]
+    private Collection $tags;
+
+    #[ORM\OneToOne(mappedBy: 'milestone', cascade: ['persist', 'remove'])]
+    private ?Discussion $discussion = null;
+
+    public function __construct()
+    {
+        $this->tasks = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -65,50 +84,38 @@ class Milestone
         return $this;
     }
 
-    public function getProgress(): ?int
-    {
-        return $this->progress;
-    }
-
-    public function setProgress(int $progress): self
-    {
-        $this->progress = $progress;
-
-        return $this;
-    }
-
-    public function getStatus(): ?int
+    public function getStatus(): ?Status
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): self
+    public function setStatus(?Status $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getPlannedStartDate(): ?\DateTimeInterface
+    public function getProject(): ?Project
     {
-        return $this->planned_start_date;
+        return $this->project;
     }
 
-    public function setPlannedStartDate(\DateTimeInterface $planned_start_date): self
+    public function setProject(?Project $project): self
     {
-        $this->planned_start_date = $planned_start_date;
+        $this->project = $project;
 
         return $this;
     }
 
-    public function getPlannedEndDate(): ?\DateTimeInterface
+    public function getDependencies(): array
     {
-        return $this->planned_end_date;
+        return $this->dependencies;
     }
 
-    public function setPlannedEndDate(\DateTimeInterface $planned_end_date): self
+    public function setDependencies(?array $dependencies): self
     {
-        $this->planned_end_date = $planned_end_date;
+        $this->dependencies = $dependencies;
 
         return $this;
     }
@@ -121,6 +128,106 @@ class Milestone
     public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getPlannedStartDate(): ?\DateTimeInterface
+    {
+        return $this->planned_start_date;
+    }
+
+    public function setPlannedStartDate(?\DateTimeInterface $planned_start_date): self
+    {
+        $this->planned_start_date = $planned_start_date;
+
+        return $this;
+    }
+
+    public function getPlannedEndDate(): ?\DateTimeInterface
+    {
+        return $this->planned_end_date;
+    }
+
+    public function setPlannedEndDate(?\DateTimeInterface $planned_end_date): self
+    {
+        $this->planned_end_date = $planned_end_date;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setMilestone($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getMilestone() === $this) {
+                $task->setMilestone(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getDiscussion(): ?Discussion
+    {
+        return $this->discussion;
+    }
+
+    public function setDiscussion(?Discussion $discussion): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($discussion === null && $this->discussion !== null) {
+            $this->discussion->setMilestone(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($discussion !== null && $discussion->getMilestone() !== $this) {
+            $discussion->setMilestone($this);
+        }
+
+        $this->discussion = $discussion;
 
         return $this;
     }
