@@ -16,6 +16,7 @@ services:
       - '80:80'
     volumes:
       - .:/var/www/html
+      - /var/www/html/vendor # ignore vendor map
     depends_on:
       - db
       - rabbitmq

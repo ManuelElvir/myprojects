@@ -7,6 +7,9 @@ WORKDIR /var/www/html
 # Copiez les fichiers de votre projet
 COPY . .
 
+# Copiez les fichiers du repertoire vendor
+COPY ./vendor /var/www/html/vendor
+
 # Installez les dépendances nécessaires
 RUN apt-get update \
     && apt-get install -y \
@@ -33,7 +36,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN yarn install
 
 # Compilez les assets avec Yarn
-RUN yarn encore dev
+RUN yarn dev
+RUN yarn build
+RUN yarn watch
 
 # Définir les autorisations pour le répertoire des caches
 RUN chown -R www-data:www-data var
