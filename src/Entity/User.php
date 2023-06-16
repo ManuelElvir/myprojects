@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class User
 {
     #[ORM\Id]
@@ -18,7 +20,7 @@ class User
     #[ORM\Column(length: 100)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 40)]
+    #[ORM\Column(length: 40, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -66,6 +68,14 @@ class User
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Comment::class)]
     private Collection $comments;
+    
+    
+    #[ORM\Column(type: 'datetime')]
+    protected DateTime $created;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    protected DateTime $updated;
+
 
     public function __construct()
     {
@@ -167,6 +177,18 @@ class User
         $this->avatar_url = $avatar_url;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 
     public function getRole(): ?Role

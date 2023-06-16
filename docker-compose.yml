@@ -16,6 +16,13 @@ services:
       - '80:80'
     volumes:
       - .:/var/www/html
+    depends_on:
+      - db
+      - rabbitmq
+      - minio
+    environment:
+      - NODE_VERSION=16
+      - SYMFONY_ENV=dev
 
   rabbitmq:
     image: rabbitmq:latest
