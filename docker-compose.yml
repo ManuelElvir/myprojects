@@ -26,12 +26,10 @@ services:
       - SYMFONY_ENV=dev
 
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:3-management
     ports:
-      - '5672:15672'
-    environment:
-      RABBITMQ_DEFAULT_USER: your_rabbitmq_user
-      RABBITMQ_DEFAULT_PASS: your_rabbitmq_password
+      - "15672:15672"
+      - "5672:5672"
 
   minio:
     image: minio/minio:latest

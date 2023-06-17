@@ -18,7 +18,13 @@ RUN apt-get update \
         libpq-dev \
         libzip-dev \
         libicu-dev \
+        librabbitmq-dev \
     && docker-php-ext-install pdo pdo_mysql zip intl opcache
+
+# Installer l'extension amqp
+RUN apt-get install -y libssl-dev pkg-config \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp
 
 # Installez Node.js 16
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
@@ -31,6 +37,10 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /u
 
 # Installez les dépendances PHP avec Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Installez Symfony CLI
+RUN curl -sS https://get.symfony.com/cli/installer | bash \
+    && mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
 # Installez les dépendances JavaScript avec Yarn
 RUN yarn install
