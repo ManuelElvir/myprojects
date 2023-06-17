@@ -4,7 +4,9 @@
 
 {% block form %}
     {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        <div class="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-danger-700" role="alert">
+            {{ flash_error }}
+        </div>
     {% endfor %}
 
     <h3 class="pt-4 text-2xl text-center">Create an Account!</h3>
@@ -96,7 +98,7 @@
         <div class="text-center">
             <a
                 class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
-                href="./index.html"
+                href="{{ path('app_login') }}"
             >
                 Already have an account? Login!
             </a>

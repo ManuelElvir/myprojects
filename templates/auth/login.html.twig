@@ -1,0 +1,77 @@
+{% extends 'sign_base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block form %}
+    {% if error %}
+        <div class="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-danger-700" role="alert">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+    {% endif %}
+    
+
+    <h3 class="pt-4 text-2xl text-center">Login in MyProjects!</h3>
+
+    <div class="px-8 pt-6 pb-8 mb-4 bg-white rounded">
+        <form action="{{ path('app_login') }}" method="post">
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-bold text-gray-700" for="username">
+                    Username
+                </label>
+                <input
+                    class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                    id="username"
+                    name="_username"
+                    type="text"
+                    placeholder="Email or Username"
+                    value="{{ last_username }}"
+                    required=""
+                />
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-bold text-gray-700" for="password">
+                    Password
+                </label>
+                <input
+                    class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                    id="password"
+                    name="_password"
+                    type="password"
+                    required=""
+                />
+            </div>
+            
+
+            <input type="hidden" name="_target_path" value="{{ redirect }}">
+
+            <div class="mb-6 text-center">
+                <button
+                    class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                    type="submit"
+                >
+                    Sign In
+                </button>
+            </div>
+            <hr class="mb-6 border-t" />
+            <div class="text-center">
+                <a
+                    class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                    href="#"
+                >
+                    Forgot Password?
+                </a>
+            </div>
+            <div class="text-center">
+                <a
+                    class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                    href="{{ path('app_register') }}"
+                >
+                    Not have an account yet? Register!
+                </a>
+            </div>
+        </form>
+    </div>
+
+    </div>
+{% endblock %}
