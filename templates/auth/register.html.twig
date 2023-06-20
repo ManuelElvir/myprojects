@@ -3,106 +3,116 @@
 {% block title %}Register{% endblock %}
 
 {% block form %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-danger-700" role="alert">
-            {{ flash_error }}
-        </div>
-    {% endfor %}
 
-    <h3 class="pt-4 text-2xl text-center">Create an Account!</h3>
+<div class="w-full xl:w-3/4 lg:w-11/12 flex">
+    <div
+        class="w-full h-auto bg-gray-400 hidden lg:block lg:w-5/12 bg-cover rounded-l-lg"
+        style="background-image: url('https://source.unsplash.com/Mv9hjnEUHR4/600x800')"
+    ></div>
+    <div class="w-full lg:w-7/12 bg-white p-5 rounded-lg lg:rounded-l-none">
 
-    <div class="px-8 pt-6 pb-8 mb-4 bg-white rounded">
-    {{ form_start(registrationForm) }}
-        <div class="mb-4 md:flex md:justify-between">
-            {{ form_row(registrationForm.first_name, {
-                'label' : 'First Name',
-                'label_attr': {'class': 'block mb-2 text-sm font-bold text-gray-700'},
-                'row_attr': {'class': 'mb-4 md:mr-2 md:mb-0'},
-                'attr': {
-                    'class': 'w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline',
-                    'placeholder': 'First Name'
-                }
-            }) }}
-            {{ form_row(registrationForm.last_name, {
-                'label' : 'Last Name',
-                'label_attr': {'class': 'block mb-2 text-sm font-bold text-gray-700'},
-                'row_attr': {'class': 'md:ml-2'},
-                'attr': {
-                    'class': 'w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline',
-                    'placeholder': 'Last Name'
-                }
-            }) }}
+        {% for flash_error in app.flashes('verify_email_error') %}
+            <div class="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-danger-700" role="alert">
+                {{ flash_error }}
+            </div>
+        {% endfor %}
+    
+        <h3 class="pt-4 text-2xl text-center">Create an Account!</h3>
+    
+        <div class="px-8 pt-6 pb-8 mb-4 bg-white rounded">
+        {{ form_start(registrationForm) }}
+            <div class="mb-4 md:flex md:justify-between">
+                {{ form_row(registrationForm.first_name, {
+                    'label' : 'First Name',
+                    'label_attr': {'class': 'block mb-2 text-sm font-bold text-gray-700'},
+                    'row_attr': {'class': 'mb-4 md:mr-2 md:mb-0'},
+                    'attr': {
+                        'class': 'w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline',
+                        'placeholder': 'First Name'
+                    }
+                }) }}
+                {{ form_row(registrationForm.last_name, {
+                    'label' : 'Last Name',
+                    'label_attr': {'class': 'block mb-2 text-sm font-bold text-gray-700'},
+                    'row_attr': {'class': 'md:ml-2'},
+                    'attr': {
+                        'class': 'w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline',
+                        'placeholder': 'Last Name'
+                    }
+                }) }}
+            </div>
+    
+            <div class="mb-4">
+                {{ form_row(registrationForm.email, {
+                    'label' : 'Email',
+                    'label_attr': {'class': 'block mb-2 text-sm font-bold text-gray-700'},
+                    'row_attr': {'class': ''},
+                    'attr': {
+                        'class': 'w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline',
+                        'placeholder': 'Email'
+                    }
+                }) }}
+            </div>
+    
+            <div class="mb-4 md:flex md:justify-between">
+                {{ form_row(registrationForm.password.first, {
+                    'label': 'Password',
+                    'label_attr': {'class': 'block mb-2 text-sm font-bold text-gray-700'},
+                    'row_attr': {'class': 'mb-4 md:mr-2 md:mb-0'},
+                    'attr': {
+                        'class': 'w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline',
+                        'placeholder': '******************',
+                    },
+                }) }}
+                {{ form_row(registrationForm.password.second, {
+                    'label' : 'Confirm Password',
+                    'label_attr' : {'class' : 'block mb-2 text-sm font-bold text-gray-700'},
+                    'row_attr' : {'class' : 'md:ml-2'},
+                    'attr' : {
+                        'class' : 'w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline',
+                        'placeholder' : '******************',
+                    },
+                }) }}
+            </div>
+    
+            <div class="flex items-center items-start mb-4">
+                {{ form_row(registrationForm.agreeTerms, {
+                    'label': 'I agree to the terms and conditions',
+                    'label_attr': {'class': 'text-sm ml-3 font-medium text-gray-900'},
+                    'row_attr': {'class': ''},
+                    'attr': {
+                        'class': 'bg-gray-50 md:ml-2 border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded',
+                    },
+                }) }}
+            </div>
+    
+            <div class="mb-6 text-center">
+                <button
+                    class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                    type="submit"
+                >
+                    Register Account
+                </button>
+            </div>
+            <hr class="mb-6 border-t" />
+            <div class="text-center">
+                <a
+                    class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                    href="#"
+                >
+                    Forgot Password?
+                </a>
+            </div>
+            <div class="text-center">
+                <a
+                    class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                    href="{{ path('app_login') }}"
+                >
+                    Already have an account? Login!
+                </a>
+            </div>
+        {{ form_end(registrationForm) }}
         </div>
-
-        <div class="mb-4">
-            {{ form_row(registrationForm.email, {
-                'label' : 'Email',
-                'label_attr': {'class': 'block mb-2 text-sm font-bold text-gray-700'},
-                'row_attr': {'class': ''},
-                'attr': {
-                    'class': 'w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline',
-                    'placeholder': 'Email'
-                }
-            }) }}
-        </div>
-
-        <div class="mb-4 md:flex md:justify-between">
-            {{ form_row(registrationForm.password.first, {
-                'label': 'Password',
-                'label_attr': {'class': 'block mb-2 text-sm font-bold text-gray-700'},
-                'row_attr': {'class': 'mb-4 md:mr-2 md:mb-0'},
-                'attr': {
-                    'class': 'w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline',
-                    'placeholder': '******************',
-                },
-            }) }}
-            {{ form_row(registrationForm.password.second, {
-                'label' : 'Confirm Password',
-                'label_attr' : {'class' : 'block mb-2 text-sm font-bold text-gray-700'},
-                'row_attr' : {'class' : 'md:ml-2'},
-                'attr' : {
-                    'class' : 'w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline',
-                    'placeholder' : '******************',
-                },
-            }) }}
-        </div>
-
-        <div class="flex items-center items-start mb-4">
-            {{ form_row(registrationForm.agreeTerms, {
-                'label': 'I agree to the terms and conditions',
-                'label_attr': {'class': 'text-sm ml-3 font-medium text-gray-900'},
-                'row_attr': {'class': ''},
-                'attr': {
-                    'class': 'bg-gray-50 md:ml-2 border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded',
-                },
-            }) }}
-        </div>
-
-        <div class="mb-6 text-center">
-            <button
-                class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                type="submit"
-            >
-                Register Account
-            </button>
-        </div>
-        <hr class="mb-6 border-t" />
-        <div class="text-center">
-            <a
-                class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
-                href="#"
-            >
-                Forgot Password?
-            </a>
-        </div>
-        <div class="text-center">
-            <a
-                class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
-                href="{{ path('app_login') }}"
-            >
-                Already have an account? Login!
-            </a>
-        </div>
-    {{ form_end(registrationForm) }}
     </div>
+</div>
 {% endblock %}

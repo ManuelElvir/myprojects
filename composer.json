@@ -19,6 +19,7 @@
         "predis/predis": "^2.2",
         "symfony/amqp-messenger": "6.3.*",
         "symfony/asset": "6.3.*",
+        "symfony/cache": "6.3.*",
         "symfony/console": "6.3.*",
         "symfony/doctrine-messenger": "6.3.*",
         "symfony/dotenv": "6.3.*",
