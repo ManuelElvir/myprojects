@@ -72,12 +72,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Comment::class)]
     private Collection $comments;
     
-    
     #[ORM\Column(type: 'datetime')]
-    protected DateTime $created;
+    protected DateTime $createdAt;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    protected DateTime $updated;
+    protected DateTime $updatedAt;
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
@@ -161,6 +160,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getFullName(): ?string
+    {
+        if($this->first_name && $this->last_name) {
+            return sprintf('%s %s', $this->first_name, $this->last_name);
+        }
+        else if($this->first_name) {
+            return $this->first_name;
+        }
+        return $this->username;
+    }
+
     public function getPhoneNumber(): ?string
     {
         return $this->phone_number;
@@ -188,13 +198,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\PrePersist]
     public function onPrePersist()
     {
-        $this->created = new \DateTime("now");
+        $this->createdAt = new \DateTime("now");
     }
 
     #[ORM\PreUpdate]
     public function onPreUpdate()
     {
-        $this->updated = new \DateTime("now");
+        $this->updatedAt = new \DateTime("now");
     }
 
     /**
@@ -521,6 +531,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTime $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

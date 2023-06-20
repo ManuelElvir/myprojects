@@ -8,7 +8,8 @@ WORKDIR /var/www/html
 COPY . .
 
 # Copiez les fichiers du repertoire vendor
-COPY ./vendor /var/www/html/vendor
+# reactivate later
+# COPY ./vendor /var/www/html/vendor
 
 # Installez les dépendances nécessaires
 RUN apt-get update \
@@ -24,6 +25,7 @@ RUN apt-get update \
 # Installer l'extension amqp
 RUN apt-get install -y libssl-dev pkg-config \
     && pecl install amqp \
+    && pecl install redis \
     && docker-php-ext-enable amqp
 
 # Installez Node.js 16

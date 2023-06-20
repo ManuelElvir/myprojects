@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FileRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FileRepository::class)]
@@ -33,6 +34,24 @@ class File
 
     #[ORM\ManyToOne(inversedBy: 'files')]
     private ?Comment $comment = null;
+    
+    #[ORM\Column(type: 'datetime')]
+    protected DateTime $createdAt;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    protected DateTime $updatedAt;
+
+    #[ORM\PrePersist]
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime("now");
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate()
+    {
+        $this->updatedAt = new \DateTime("now");
+    }
 
     public function getId(): ?int
     {
@@ -122,4 +141,40 @@ class File
 
         return $this;
     }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTime $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function toModel(): \App\Model\File
+    {
+        $model = new \App\Model\File();
+        $model->filename = $this->file_name;
+        $model->ownerName = $this->owner->getFullName();
+        $model->createdAt = $this->createdAt;
+        $model->url = $this->url;
+
+        return $model;
+    }
+
 }

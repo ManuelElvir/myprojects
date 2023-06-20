@@ -1,0 +1,28 @@
+# config/elasticsearch/comment_mapping.yaml
+settings:
+    number_of_replicas: 0
+    number_of_shards: 1
+    refresh_interval: 60s
+mappings:
+    dynamic: false
+    properties:
+        content:
+            type: text
+            analyzer: english
+            fields:
+                autocomplete:
+                    type: text
+                    analyzer: app_autocomplete
+                    search_analyzer: standard
+        authorName:
+            type: text
+            analyzer: english
+        files:
+            type: object
+            properties:
+                filename:
+                    type: text
+                    analyzer: english
+                ownerName:
+                    type: text
+                    analyzer: english

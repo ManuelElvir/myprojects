@@ -16,11 +16,13 @@ services:
       - '80:80'
     volumes:
       - .:/var/www/html
-      - /var/www/html/vendor # ignore vendor map
+      # reactivate later
+      # - /var/www/html/vendor # ignore vendor map
     depends_on:
       - db
       - rabbitmq
       - minio
+      - redis
     environment:
       - NODE_VERSION=16
       - SYMFONY_ENV=dev
@@ -31,14 +33,47 @@ services:
       - "15672:15672"
       - "5672:5672"
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    environment:
+        - cluster.name=docker-cluster
+        - bootstrap.memory_lock=true
+        - discovery.type=single-node
+        - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # 512mo HEAP
+    ulimits:
+        memlock:
+            soft: -1
+            hard: -1
+    ports:
+        - 9200:9200
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.10
+    environment:
+        ELASTICSEARCH_URL: http://elasticsearch:9200
+    depends_on:
+        - elasticsearch
+    ports:
+        - 5601:5601
+  
+  redis:
+    image: redis:7.2-rc2-alpine
+    ports:
+      - 6379:6379
+
+  # n8n:
+  #   image: n8nio/n8n
+  #   ports:
+  #     - "5678:5678"
+
   minio:
     image: minio/minio:latest
     command: server /data
     ports:
       - '9000:9000'
     environment:
-      MINIO_ROOT_USER: your_minio_user
-      MINIO_ROOT_PASSWORD: your_minio_password
+      MINIO_ROOT_USER: minio_root
+      MINIO_ROOT_PASSWORD: minio_toor
     volumes:
       - minio_data:/data
 

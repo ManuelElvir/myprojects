@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MilestoneRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -28,11 +29,17 @@ class Milestone
     #[ORM\ManyToOne(inversedBy: 'milestones')]
     private ?Project $project = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[ORM\Column(type: Types::JSON, nullable: true)]
     private array $dependencies = [];
 
     #[ORM\ManyToOne(inversedBy: 'ownedMilestones')]
     private ?User $owner = null;
+    
+    #[ORM\Column(type: 'datetime')]
+    protected DateTime $createdAt;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    protected DateTime $updatedAt;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $planned_start_date = null;
@@ -156,6 +163,18 @@ class Milestone
         return $this;
     }
 
+    #[ORM\PrePersist]
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime("now");
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate()
+    {
+        $this->updatedAt = new \DateTime("now");
+    }
+
     /**
      * @return Collection<int, Task>
      */
@@ -228,6 +247,30 @@ class Milestone
         }
 
         $this->discussion = $discussion;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTime $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

@@ -10,7 +10,7 @@ final class NewUserMessage
      */
     
     public function __construct(
-        private string $userId,
+        private readonly string $userId,
     ) {
     }
 

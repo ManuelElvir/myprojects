@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -27,6 +28,24 @@ class Comment
 
     #[ORM\Column(nullable: true)]
     private ?int $repliedTo = null;
+    
+    #[ORM\Column(type: 'datetime')]
+    protected DateTime $createdAt;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    protected DateTime $updatedAt;
+
+    #[ORM\PrePersist]
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime("now");
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate()
+    {
+        $this->updatedAt = new \DateTime("now");
+    }
 
     public function __construct()
     {
@@ -102,5 +121,51 @@ class Comment
         $this->repliedTo = $repliedTo;
 
         return $this;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTime $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function toModel(): \App\Model\Comment
+    {
+        $model = new \App\Model\Comment();
+        $model->content = $this->content;
+        $model->authorName = $this->owner->getFullName();
+        $model->sentAt = $this->createdAt;
+
+        /**
+         * @var File $file
+         */
+        foreach ($this->files as $file) {
+            $commentFile = new \App\Model\File();
+            $commentFile->filename = $file->getFileName();
+            $commentFile->url = $file->getUrl();
+            $commentFile->ownerName = $file->getOwner()->getFullName();
+
+            $model->files[] = $commentFile;
+        }
+
+        return $model;
     }
 }
