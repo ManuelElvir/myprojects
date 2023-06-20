@@ -7,6 +7,7 @@ class File
     public $filename;
     public $url;
     public $ownerName;
+    public $type;
 
     /**
      * @var \DateTime|null

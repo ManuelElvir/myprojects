@@ -1,85 +1,60 @@
-{% extends 'sign_base.html.twig' %}
+{% extends 'auth/auth.html.twig' %}
 
 {% block title %}Log in{% endblock %}
+{% block heading %}Sign in to My Projetcs{% endblock %}
 
 {% block form %}
 
-<div class="w-full lg:w-3/4 xl:w-1/2 lg:w-11/12 flex">
-    <div
-        class="w-full h-auto bg-gray-400 hidden lg:block lg:w-5/12 bg-cover rounded-l-lg"
-        style="background-image: url('https://source.unsplash.com/Mv9hjnEUHR4/600x800')"
-    ></div>
-    <div class="w-full lg:w-7/12 bg-white p-5 rounded-lg lg:rounded-l-none">
-        
+<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <form class="space-y-6" action="{{ path('app_login') }}" method="POST">
         {% if error %}
             <div class="mb-4 rounded-lg bg-danger-100 px-6 py-5 text-base text-danger-700 mn-danger-alert" role="alert">
                 {{ error.messageKey|trans(error.messageData, 'security') }}
             </div>
         {% endif %}
-        
-    
-        <h3 class="pt-4 text-2xl text-center">Login in MyProjects!</h3>
-    
-        <div class="px-8 pt-6 pb-8 mb-4 bg-white rounded">
-            <form action="{{ path('app_login') }}" method="post">
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-bold text-gray-700" for="username">
-                        Username
-                    </label>
-                    <input
-                        class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        id="username"
-                        name="_username"
-                        type="text"
-                        placeholder="Email or Username"
-                        value="{{ last_username }}"
-                        required=""
-                    />
-                </div>
-    
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-bold text-gray-700" for="password">
-                        Password
-                    </label>
-                    <input
-                        class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        id="password"
-                        name="_password"
-                        type="password"
-                        required=""
-                    />
-                </div>
-                
-    
-                <input type="hidden" name="_target_path" value="{{ redirect }}">
-    
-                <div class="mb-6 text-center">
-                    <button
-                        class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                        type="submit"
-                    >
-                        Sign In
-                    </button>
-                </div>
-                <hr class="mb-6 border-t" />
-                <div class="text-center">
-                    <a
-                        class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
-                        href="#"
-                    >
-                        Forgot Password?
-                    </a>
-                </div>
-                <div class="text-center">
-                    <a
-                        class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
-                        href="{{ path('app_register') }}"
-                    >
-                        Not have an account yet? Register!
-                    </a>
-                </div>
-            </form>
+        <div>
+            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+            <div class="mt-2">
+                <input 
+                    id="username"
+                    name="_username"
+                    type="text"
+                    placeholder="Email or Username"
+                    value="{{ last_username }}"
+                    required
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            </div>
         </div>
-    </div>
+
+        <div>
+            <div class="flex items-center justify-between">
+                <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                <div class="text-sm">
+                    <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                </div>
+            </div>
+            <div class="mt-2">
+                <input 
+                    id="password"
+                    name="_password"
+                    type="password"
+                    required
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            </div>
+        </div>
+
+        <input type="hidden" name="_target_path" value="{{ redirect }}">
+
+
+        <div>
+            <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
+        </div>
+    </form>
+
+    <p class="mt-10 text-center text-sm text-gray-500">
+      Not a member?
+      <a href="{{ path('app_register') }}" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a>
+    </p>
 </div>
+
 {% endblock %}

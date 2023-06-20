@@ -171,6 +171,7 @@ class File
         $model = new \App\Model\File();
         $model->filename = $this->file_name;
         $model->ownerName = $this->owner->getFullName();
+        $model->type = $this->fileType->getName();
         $model->createdAt = $this->createdAt;
         $model->url = $this->url;
 

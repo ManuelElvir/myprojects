@@ -1,4 +1,8 @@
 # config/packages/elastically.yaml
+
+services : 
+    JoliCode\Elastically\Messenger\IndexationRequestHandler: ~
+
 elastically:
     connections:
         default:
@@ -16,12 +20,13 @@ elastically:
             # Mapping between an index name and a FQCN
             index_class_mapping:
                 comment-index: App\Model\Comment
+                files-index: App\Model\File
 
             # Configuration for the serializer
             serializer:
                 # Fill a static context
                 context_mapping:
-                    foo: bar
+                    # foo: bar
 
             # If you want to add a prefix for your index in elasticsearch (you can still call it by its base name everywhere!)
             # prefix: '%kernel.environment%'

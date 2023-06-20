@@ -14,11 +14,9 @@ form {
     input:focus {
       outline: 0;
     }
-}
-
-.mn-danger-alert {
-    --tw-text-opacity: 1;
-    color: rgb(176 35 58/var(--tw-text-opacity));
-    --tw-bg-opacity: 1;
-    background-color: rgb(250 229 233/var(--tw-bg-opacity));
+    input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="date"], input[type="datetime-local"], input[type="month"], input[type="search"], input[type="tel"], input[type="time"], input[type="week"], input[multiple], textarea, select {
+        padding-right: 0.75rem;
+        padding-left: 0.75rem;
+        --tw-shadow: 0 0 #0000;
+    }
 }

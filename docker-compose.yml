@@ -17,7 +17,7 @@ services:
     volumes:
       - .:/var/www/html
       # reactivate later
-      # - /var/www/html/vendor # ignore vendor map
+      - /var/www/html/vendor # ignore vendor map
     depends_on:
       - db
       - rabbitmq
