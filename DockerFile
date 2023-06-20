@@ -25,7 +25,7 @@ RUN apt-get update \
 # Installer l'extension amqp
 RUN apt-get install -y libssl-dev pkg-config \
     && pecl install amqp \
-    && pecl install redis \
+    && pickle install redis \
     && docker-php-ext-enable amqp
 
 # Installez Node.js 16
