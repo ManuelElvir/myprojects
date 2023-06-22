@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -22,12 +23,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 100, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Regex(pattern: "/^[a-zA-Z0-9]+$/", message: "Username should only contain alphanumeric characters.")]
     private ?string $username = null;
 
     #[ORM\Column(length: 40, unique: true)]
+    #[Assert\NotBlank(message:"Username is required.")]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(60, minMessage: 'Bad hashing method', maxMessage: 'Bad hashing method') ]
     private ?string $password = null;
 
     #[ORM\Column(length: 100, nullable: true)]

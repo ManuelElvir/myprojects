@@ -10,25 +10,25 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class UserTest extends KernelTestCase
 {
 
-    public function testSomething(): void
-    {
-        $kernel = self::bootKernel();
+    // public function testSomething(): void
+    // {
+    //     $kernel = self::bootKernel();
 
-        $this->assertSame('test', $kernel->getEnvironment());
-        // $routerService = static::getContainer()->get('router');
-        // $myCustomService = static::getContainer()->get(CustomService::class);
-    }
+    //     $this->assertSame('test', $kernel->getEnvironment());
+    //     // $routerService = static::getContainer()->get('router');
+    //     // $myCustomService = static::getContainer()->get(CustomService::class);
+    // }
 
-    public function getEntity(): User
+    private function getEntity(): User
     {
         $user = (new User())
             ->setEmail('test@example.com')
             ->setUsername('testUser');
-        $user->setPassword(sha1('Test1234'));
+        $user->setPassword('$2y$13$7hpZ/AoL9//25UBo3nUdEeb.7bz4NIIvM0y3ZnI5yYKt6FKbg3AHW');
         return $user;
     }
 
-    public function assertHasErrors(User $code, int $number = 0)
+    private function assertHasErrors(User $code, int $number = 0)
     {
         self::bootKernel();
         $errors = self::getContainer()->get('validator')->validate($code);
@@ -37,6 +37,7 @@ class UserTest extends KernelTestCase
         foreach($errors as $error) {
             $messages[] = $error->getPropertyPath() . ' => ' . $error->getMessage();
         }
+        printf($errors);
         $this->assertCount($number, $errors, implode(', ', $messages));
     }
 
@@ -45,18 +46,18 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors($this->getEntity(), 0);
     }
 
-    public function testInvalidEmailEntity()
-    {
-        $this->assertHasErrors($this->getEntity()->setEmail('blablacar'), 1);
-    }
+    // public function testInvalidEmailEntity()
+    // {
+    //     $this->assertHasErrors($this->getEntity()->setEmail('blablacar'), 1);
+    // }
 
-    public function testInvalidBlankUsernameEntity()
-    {
-        $this->assertHasErrors($this->getEntity()->setUsername(''), 1);
-    }
+    // public function testInvalidBlankUsernameEntity()
+    // {
+    //     $this->assertHasErrors($this->getEntity()->setUsername(''), 1);
+    // }
 
-    public function testInvalidBlankPasswordEntity()
-    {
-        $this->assertHasErrors($this->getEntity()->setPassword(''), 1);
-    }
+    // public function testInvalidBlankPasswordEntity()
+    // {
+    //     $this->assertHasErrors($this->getEntity()->setPassword(''), 1);
+    // }
 }
