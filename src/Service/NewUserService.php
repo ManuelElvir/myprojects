@@ -49,7 +49,7 @@ final class NewUserService {
         $user = $this->entityManager->getRepository(User::class)->find($userId);
 
         $email = (new TemplatedEmail())
-            ->from('huhevk6f@mailosaur.net')
+            ->from('noreply@png2webp.com')
             ->to($user->getEmail())
             ->cc('manuel.njiakim@gmail.com')
             ->bcc('njiakimmanue@gmail.com')
@@ -57,7 +57,7 @@ final class NewUserService {
             ->htmlTemplate('mail/welcome_email.html.twig')
             ->context([
                 'user' => $user,
-            ]);;
+            ]);
         
         $this->mailer->send($email);
     }
