@@ -2,12 +2,12 @@
 
 namespace App\Tests\Repository;
 
-use App\Repository\StatusRepository;
+use App\Repository\FileTypeRepository;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-final class StatusRepositoryTest extends KernelTestCase
+final class FileTypeRepositoryTest extends KernelTestCase
 {
     /** @var AbstractDatabaseTool */
     protected $databaseTool;
@@ -21,13 +21,13 @@ final class StatusRepositoryTest extends KernelTestCase
         $this->databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
     }
     
-    public function testGetStatusCount(): void
+    public function testGetFileTypeCount(): void
     {
         $this->databaseTool->loadFixtures(array(
-            'App\DataFixtures\StatusFixtures'
+            'App\DataFixtures\FileFixtures'
         ));
-        $statusCount = $this->getContainer()->get(StatusRepository::class)->count([]);
-        $this->assertGreaterThan(0, $statusCount, 'Incorrect status count');
+        $fileTypeCount = $this->getContainer()->get(FileTypeRepository::class)->count([]);
+        $this->assertGreaterThan(0, $fileTypeCount, 'Incorrect status count');
     }
 
     protected function tearDown(): void

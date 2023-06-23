@@ -4,9 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Status;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class StatusFixtures extends Fixture
+class StatusFixtures extends Fixture implements FixtureInterface
 {
     const STATUS = [
         'not_started' => [
