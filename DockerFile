@@ -9,7 +9,7 @@ COPY . .
 
 # Copiez les fichiers du repertoire vendor
 # reactivate later
-COPY ./vendor /var/www/html/vendor
+# COPY ./vendor /var/www/html/vendor
 
 # Installez les dépendances nécessaires
 RUN apt-get update \

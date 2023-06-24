@@ -15,34 +15,88 @@ permissions:
   contents: read
 
 jobs:
-  symfony-tests:
+  tests-with-docker:
     runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: toor
+          MYSQL_DATABASE: myprojects
+          MYSQL_USER: mn_root
+          MYSQL_PASSWORD: mn_toor
+        ports:
+          - 3306:3306
+
+      web:
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - 80:80
+        volumes:
+          - .:/var/www/html
+          # - /var/www/html/vendor # Ignore vendor map
+        depends_on:
+          - db
+          - rabbitmq
+          - minio
+          - redis
+        environment:
+          - NODE_VERSION=16
+          - SYMFONY_ENV=dev
+
+      rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+          - 15672:15672
+          - 5672:5672
+
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+        environment:
+          - cluster.name=docker-cluster
+          - bootstrap.memory_lock=true
+          - discovery.type=single-node
+          - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # 512mo HEAP
+        ulimits:
+          memlock:
+            soft: -1
+            hard: -1
+        ports:
+          - 9200:9200
+
+      redis:
+        image: redis:7.2-rc2-alpine
+        ports:
+          - 6379:6379
+
+      # minio:
+      #   image: minio/minio:latest
+      #   command: server /data
+      #   ports:
+      #     - 9000:9000
+      #   environment:
+      #     MINIO_ROOT_USER: minio_root
+      #     MINIO_ROOT_PASSWORD: minio_toor
+      #   volumes:
+      #     - minio_data:/data
+
     steps:
-    #  To automatically get bug fixes and new Php versions for shivammathur/setup-php,
-    # change this to (see https://github.com/shivammathur/setup-php#bookmark-versioning):
-    # uses: shivammathur/setup-php@v2
-    - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
-      with:
-        php-version: '8.2'
-    - uses: actions/checkout@v3
-    - name: Copy .env.test.local
-      run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Create Database
-      run: |
-        php bin/console doctrine:database:create --env=test
-        php bin/console doctrine:schema:update --dump-sql --env=test
-      #  php bin/console doctrine:migrations:migrate -n --env=test
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DATABASE_URL: sqlite:///%kernel.cache_dir%/test.db
-      run: vendor/bin/phpunit
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-docker@v3
+
+      - name: Build and run Docker containers
+        run: docker-compose up -d
+
+      - name: Wait for services to start
+        run: |
+          sleep 15 # Adjust the sleep duration as needed
+
+      - name: Run tests
+        run: |
+          docker-compose exec web bin/phpunit
