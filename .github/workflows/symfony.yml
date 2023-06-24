@@ -37,12 +37,6 @@ jobs:
           - 80:80
         volumes:
           - .:/var/www/html
-          # - /var/www/html/vendor # Ignore vendor map
-        depends_on:
-          - db
-          - rabbitmq
-          - minio
-          - redis
         environment:
           - NODE_VERSION=16
           - SYMFONY_ENV=dev
