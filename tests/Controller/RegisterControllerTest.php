@@ -28,7 +28,7 @@ class RegisterControllerTest extends WebTestCase
         $client = static::createClient();
         
         $client->request('POST', '/register', [
-            'registration_form[email]'=>'testd1@test.com',
+            'registration_form[email]'=>'testa1@test.com',
             'registration_form[password][first]'=>'P@ssword23',
             'registration_form[password][second]'=>'P@ssword23',
             'registration_form[agreeTerms]'=>'1',
@@ -59,7 +59,7 @@ class RegisterControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/register');
         $form = $crawler->selectButton('Sign up')->form([
-            'registration_form[email]'=>'testd2@test.com',
+            'registration_form[email]'=>'testa2@test.com',
             'registration_form[password][first]'=>'simple_password',
             'registration_form[password][second]'=>'simple_password',
             'registration_form[agreeTerms]'=>'1',
@@ -77,7 +77,7 @@ class RegisterControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/register');
         $form = $crawler->selectButton('Sign up')->form([
-            'registration_form[email]'=>'testd3@test.com',
+            'registration_form[email]'=>'testa3@test.com',
             'registration_form[password][first]'=>'P@ssword23',
             'registration_form[password][second]'=>'P@ssword23',
             'registration_form[agreeTerms]'=>'1',
@@ -95,7 +95,7 @@ class RegisterControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/register');
         $form = $crawler->selectButton('Sign up')->form([
-            'registration_form[email]'=>'testd3@test.com',
+            'registration_form[email]'=>'testa3@test.com',
             'registration_form[password][first]'=>'P@ssword23',
             'registration_form[password][second]'=>'P@ssword23',
             'registration_form[agreeTerms]'=>'1',
