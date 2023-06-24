@@ -23,18 +23,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 100, unique: true)]
-    #[Assert\NotBlank]
-    #[Assert\Regex(pattern: "/^[a-zA-Z0-9]+$/", message: "Username should only contain alphanumeric characters.")]
     private ?string $username = null;
 
     #[ORM\Column(length: 40, unique: true)]
-    #[Assert\NotBlank(message:"Username is required.")]
+    #[Assert\NotBlank(message:"Email is required.")]
     #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Assert\Length(60, minMessage: 'Bad hashing method', maxMessage: 'Bad hashing method') ]
     private ?string $password = null;
 
     #[ORM\Column(length: 100, nullable: true)]
@@ -206,6 +203,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function onPrePersist()
     {
         $this->createdAt = new \DateTime("now");
+        $this->updatedAt = new \DateTime("now");
+        if(!$this->roles || empty($this->roles))
+        {
+            $this->roles = ['ROLE_USER'];
+        }
+        if(!$this->username) {
+            $this->username = explode('@', $this->email)[0];
+        }
     }
 
     #[ORM\PreUpdate]
