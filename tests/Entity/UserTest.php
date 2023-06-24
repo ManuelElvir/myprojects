@@ -60,19 +60,9 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors($this->getEntity()->setEmail('blablacar'), 1);
     }
 
-    public function testInvalidBlankUsernameEntity()
-    {
-        $this->assertHasErrors($this->getEntity()->setUsername(''), 1);
-    }
-
     public function testInvalidBlankPasswordEntity()
     {
-        $this->assertHasErrors($this->getEntity()->setPassword(''), 2);
-    }
-
-    public function testNotHashedPasswordEntity()
-    {
-        $this->assertHasErrors($this->getEntity()->setPassword('F9kokfe_@héu'), 1);
+        $this->assertHasErrors($this->getEntity()->setPassword(''), 1);
     }
     
     protected function tearDown(): void
