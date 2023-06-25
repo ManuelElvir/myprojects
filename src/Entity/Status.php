@@ -6,6 +6,7 @@ use App\Repository\StatusRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StatusRepository::class)]
 class Status
@@ -20,6 +21,10 @@ class Status
 
     #[ORM\Column(length: 100)]
     private ?string $value = null;
+
+    #[ORM\Column(length: 100)]
+    #[Assert\Regex(pattern:"/^#[A-Fa-f0-9]{6}$/", message:"La couleur doit être au format hexadécimal.")]
+    private ?string $color = null;
 
     #[ORM\OneToMany(mappedBy: 'status', targetEntity: Project::class)]
     private Collection $projects;
@@ -58,6 +63,18 @@ class Status
     public function setValue(string $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getColor():?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): self
+    {
+        $this->color = $color;
 
         return $this;
     }

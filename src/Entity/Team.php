@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TeamRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +28,24 @@ class Team
 
     #[ORM\OneToMany(mappedBy: 'team', targetEntity: Project::class)]
     private Collection $projects;
+    
+    #[ORM\Column(type: 'datetime')]
+    protected DateTime $createdAt;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    protected DateTime $updatedAt;
+
+    #[ORM\PrePersist]
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime("now");
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate()
+    {
+        $this->updatedAt = new \DateTime("now");
+    }
 
     public function __construct()
     {
@@ -119,6 +138,30 @@ class Team
                 $project->setTeam(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTime $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

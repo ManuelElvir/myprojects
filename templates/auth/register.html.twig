@@ -1,0 +1,66 @@
+{% extends 'auth/auth.html.twig' %}
+
+{% block title %}Register{% endblock %}
+{% block heading %}Sign up to My Projects{% endblock %}
+
+{% block form %}
+
+<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    {{ form_start(registrationForm, {
+        'attr': {
+            'class': 'space-y-6',
+        }
+    }) }}
+    
+        {{ form_row(registrationForm.email, {
+            'label' : 'Email',
+            'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'},
+            'row_attr': {'class': ''},
+            'attr': {
+                'class': 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6',
+                'placeholder': 'Email'
+            }
+        }) }}
+        {{ form_row(registrationForm.password.first, {
+            'label': 'Password',
+            'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'},
+            'row_attr': {'class': 'mt-2'},
+            'attr': {
+                'class': 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6',
+                'placeholder': '**********',
+            },
+        }) }}
+        {{ form_row(registrationForm.password.second, {
+            'label': 'Confirm Password',
+            'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'},
+            'row_attr': {'class': ''},
+            'attr': {
+                'class': 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6',
+                'placeholder': '**********',
+            },
+        }) }}
+        {{ form_row(registrationForm.agreeTerms, {
+            'label': 'I agree to the terms and conditions',
+            'label_attr': {'class': 'text-sm font-medium leading-6 text-gray-900'},
+            'row_attr': {'class': 'flex flex-row-reverse items-center gap-4 justify-end'},
+            'attr': {
+                'class': 'bg-gray-50 md:ml-2 border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded',
+            },
+        }) }}
+        <div>
+          <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign up</button>
+        </div>
+    {{ form_end(registrationForm) }}
+
+  <p class="mt-10 text-center text-sm text-gray-500">
+    Already have a account?
+    <a href="{{ path('app_login') }}" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign In</a>
+  </p>
+</div>
+
+<script type="text/javascript">
+    const labelAgreement = document.querySelector('label[for="registration_form_agreeTerms"]')
+    labelAgreement.innerHTML = "I agree to the <a href='/terms' class='font-semibold leading-6 text-indigo-600 hover:text-indigo-500'>terms and conditions</a>"
+</script>
+
+{% endblock %}
