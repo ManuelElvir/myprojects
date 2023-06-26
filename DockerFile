@@ -9,7 +9,7 @@ COPY . .
 
 # Copiez les fichiers du repertoire vendor
 # reactivate later
-# COPY ./vendor /var/www/html/vendor
+COPY ./vendor /var/www/html/vendor
 
 # Installez les dépendances nécessaires
 RUN apt-get update \
@@ -56,6 +56,9 @@ RUN chown -R www-data:www-data var
 
 # Activez le module Apache mod_rewrite
 RUN a2enmod rewrite
+
+# install browser extension
+RUN apt-get install chromium-chromedriver firefox-geckodriver
 
 # Exposez le port 80 pour Apache
 EXPOSE 80

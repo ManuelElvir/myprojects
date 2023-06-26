@@ -39,6 +39,86 @@ class FileRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Find all files which respect the given criteria.
+     * @return File[]
+     */
+    public function findWithFiltersPaginated(
+        array $filters, 
+        $orderBy = 'createdAt',
+        $orderDirection = 'desc',
+        $limit = null,
+        $offset = null
+        ): array
+    {
+        $qb = $this->createQueryBuilder('f');
+
+        foreach ($filters as $filter) {
+            $qb->andWhere($filter);
+        }
+        $qb->orderBy($orderBy, $orderDirection);
+        if($limit) {
+            $qb->setMaxResults($limit);
+        }
+        if($offset) {
+            $qb->setFirstResult($offset);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Find all files which respect the given criteria(SQLExecution)
+     * 
+     * 
+     * @return File[] $files
+     */
+    public function findSQLFiltersPaginated(
+        array $filters, 
+        string $orderBy = 'createdAt',
+        string $orderDirection = 'desc',
+        int $limit = null,
+        int $offset = null
+        ): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT * FROM files f WHERE 1 = 1 ';
+
+        $sql = 'SELECT f.id as id FROM file as f 
+            INNER JOIN task as t on f.task_id = t.id 
+            INNER JOIN project as p on t.project_id = p.id 
+            WHERE 1 = 1 ';
+        
+        foreach ($filters as $filter) {
+            $sql .= 'AND '. $filter . ' ';
+        }
+
+        $sql.= 'ORDER BY '. $orderBy.' '. $orderDirection . ' ';
+        if($limit) {
+            $sql.= 'LIMIT '. $limit.' ';
+        }
+        if($offset) {
+            $sql.= 'OFFSET '. $offset;
+        }
+
+        $resultSet = $conn->executeQuery($sql);
+
+        // returns an array of arrays (i.e. a raw data set)
+        $data = $resultSet->fetchAllAssociative();
+
+        /**
+         * @var File[] $files
+         */
+        $files = [];
+        foreach($data as $item)
+        {
+            $files[] = $this->find($item['id']);
+        }
+
+        return $files;
+    }
+
 //    /**
 //     * @return File[] Returns an array of File objects
 //     */
