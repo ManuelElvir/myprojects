@@ -103,6 +103,7 @@
         }
     },
     "require-dev": {
+        "dbrekelmans/bdi": "^1.0",
         "doctrine/data-fixtures": "^1.6",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "liip/functional-test-bundle": "^4.0.0",
@@ -112,6 +113,7 @@
         "symfony/css-selector": "6.3.*",
         "symfony/debug-bundle": "6.3.*",
         "symfony/maker-bundle": "^1.0",
+        "symfony/panther": "^2.1",
         "symfony/phpunit-bridge": "^6.3",
         "symfony/stopwatch": "6.3.*",
         "symfony/web-profiler-bundle": "6.3.*",

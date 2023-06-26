@@ -50,7 +50,7 @@ class FileControllerTest extends WebTestCase
         $users = $this->loadFixtures();
         /** @var User user */
         $user = $users[$role===USER_ROLES::ADMIN?'user_admin':'user_user'];
-
+        file_put_contents(__DIR__.'/users.txt', $user->getEmail());
         $container = $client->getContainer();
         $sessionSavePath = $container->getParameter('session.save_path');
         $sessionStorage = new MockFileSessionStorage($sessionSavePath);

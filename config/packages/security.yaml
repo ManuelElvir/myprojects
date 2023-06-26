@@ -38,14 +38,14 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # matches /admin/users/*
-        - { path: '^/admin/users', roles: ROLE_SUPER_ADMIN }
+        # matches /app/admin/users/*
+        - { path: '^/app/admin/users', roles: ROLE_SUPER_ADMIN }
 
         # matches /admin/* except for anything matching the above rule
-        - { path: '^/admin', roles: ROLE_ADMIN }
+        - { path: '^/app/admin', roles: ROLE_ADMIN }
 
-        # matches /* except for anything matching the above rule
-        # - { path: '^/', roles: ROLE_USER }
+        # matches /app/* except for anything matching the above rule
+        - { path: '^/app', roles: ROLE_USER }
 
         # matches /* except for anything matching the above rule
         - { path: '/login', roles: PUBLIC_ACCESS }
