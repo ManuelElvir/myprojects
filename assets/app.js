@@ -12,5 +12,5 @@ import 'tw-elements';
 import './styles/app.scss';
 import './styles/sign.scss';
 
-import { Select, initTE } from "tw-elements";
-initTE({ Select });
+import { Select, Dropdown, initTE } from "tw-elements";
+initTE({ Select, Dropdown });

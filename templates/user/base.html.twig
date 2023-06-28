@@ -38,6 +38,17 @@
 						</div>
 						<div class="hidden md:block">
 							<div class="ml-4 flex items-center md:ml-6">
+								<div class="relative flex w-[350px] flex-wrap items-stretch">
+									<input
+									type="search" class="relative m-0 block w-[1px] min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary" placeholder="Search" aria-label="Search" aria-describedby="button-addon2"/>
+
+									<!--Search icon-->
+									<span class="input-group-text flex items-center whitespace-nowrap rounded px-3 py-1.5 text-center text-base font-normal text-neutral-700 dark:text-neutral-200" id="basic-addon2">
+										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+											<path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd"/>
+										</svg>
+									</span>
+								</div>
 								<button type="button" class="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
 									<span class="sr-only">View notifications</span>
 									<svg class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -55,15 +66,15 @@
 									</div>
 
 									<!--
-									                Dropdown menu, show/hide based on menu state.
-									
-									                Entering: "transition ease-out duration-100"
-									                  From: "transform opacity-0 scale-95"
-									                  To: "transform opacity-100 scale-100"
-									                Leaving: "transition ease-in duration-75"
-									                  From: "transform opacity-100 scale-100"
-									                  To: "transform opacity-0 scale-95"
-									              -->
+																		                Dropdown menu, show/hide based on menu state.
+																		
+																		                Entering: "transition ease-out duration-100"
+																		                  From: "transform opacity-0 scale-95"
+																		                  To: "transform opacity-100 scale-100"
+																		                Leaving: "transition ease-in duration-75"
+																		                  From: "transform opacity-100 scale-100"
+																		                  To: "transform opacity-0 scale-95"
+																		              -->
 									<div
 										class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
 										<!-- Active: "bg-gray-100", Not Active: "" -->
@@ -131,15 +142,15 @@
 			<div class="p-4 sm:ml-64 mt-14">
 				<header class="bg-white shadow">
 					<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-						<h1 class="text-3xl font-bold tracking-tight text-gray-900">{% block heading %}{% endblock %}</h1>
+						<h1 class="text-3xl font-bold tracking-tight text-gray-900"> {% block heading %}{% endblock %}
+							</h1>
+						</div>
+					</header>
+					<main>
+						<div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8"> {% block content %}{% endblock %}
+							</div>
+						</main>
 					</div>
-				</header>
-				<main>
-					<div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-						{% block content %}{% endblock %}
-					</div>
-				</main>
-			</div>
-		</div>
-	</body>
-</html>
+				</div>
+			</body>
+		</html>
