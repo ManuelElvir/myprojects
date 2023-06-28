@@ -20,7 +20,8 @@ class DashboardController extends AbstractController
 
         
         return $this->render('user/dashboard/index.html.twig', [
-            'user' => $user
+            'user' => $user,
+            'tasks' => [1, 2, 3, 4, 5]
         ]);
     }
 

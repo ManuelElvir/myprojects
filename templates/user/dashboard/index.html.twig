@@ -1,14 +1,66 @@
 {% extends 'user/base.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Dashboard
+{% endblock %}
 
-{% block heading %}Dashboard{% endblock %}
+{% block heading %}Dashboard
+{% endblock %}
 
 {% block content %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<style>
+		.example-wrapper {
+			margin: 1em auto;
+			max-width: 800px;
+			width: 95%;
+			font: 18px / 1.5 sans-serif;
+		}
+		.example-wrapper code {
+			background: #F5F5F5;
+			padding: 2px 6px;
+		}
+	</style>
 
-Home index.html
+	<div class="w-full">
+		<div class="flex lg:flex-row sm:flex-col gap-4">
+			<div class="lg:basis-2/3 sm:basis-full">
+				<h5 class="mb-4 mt-0 text-xl font-medium leading-tight text-primary-900">
+					Your Tasks
+				</h5>
+				<div class="grid grid-cols-3 gap-4">
+					{% for task in tasks %}
+						<div class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+							
+                            <div class="flex justify-between gap-2 p-4 xl:p-6">
+                                <div class="">
+                                    <h5 class="mb-2 text-sm font-medium leading-tight text-gray-700 dark:text-gray-300">
+                                        Project Name<br/>#<span class="font-regular text-gray-500 dark:text-gray-400">Project Milestone</span>
+                                    </h5>
+                                    <p class="mb-4 text-base text-neutral-800 dark:text-neutral-200">
+                                        Name of the Project task
+                                    </p>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <div clss="">
+										<img class="h-6 w-6 xl:h-8 xl:w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                                    </div>
+                                    <div clss="">
+										<img class="h-6 w-6 xl:h-8 xl:w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                                    </div>
+                                </div>
+                            </div>
+							
+						</div>
+					{% endfor %}
+				</div>
+				<h5 class="mb-2 mt-12 text-xl font-medium leading-tight text-primary-900">
+					Active Milestone
+				</h5>
+			</div>
+			<div class="lg:basis-1/3 sm:basis-full">
+				<h5 class="mb-2 mt-0 text-xl font-medium leading-tight text-primary-900">
+					Recent Activity
+				</h5>
+			</div>
+		</div>
+	</div>
 {% endblock %}
