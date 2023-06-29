@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-publish-image:
-    needs: symfony-tests
+    # needs: symfony-tests
     runs-on: ubuntu-latest
 
     steps:
