@@ -21,7 +21,9 @@ class DashboardController extends AbstractController
         
         return $this->render('user/dashboard/index.html.twig', [
             'user' => $user,
-            'tasks' => [1, 2, 3, 4, 5]
+            'tasks' => [1, 2, 3, 4, 5],
+            'activities' => [1, 2, 3, 4, 5, 6, 7, 8],
+            'milestones' => [1, 2],
         ]);
     }
 
