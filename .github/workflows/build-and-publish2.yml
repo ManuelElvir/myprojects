@@ -26,4 +26,4 @@ jobs:
       - name: Build and Publish Docker image
         run: |
           docker buildx create --use
-          docker buildx build --push --tag ghcr.io/manuelelvir:latest .
+          docker buildx build --push --tag ghcr.io/manuelelvir/myprojects:latest .
