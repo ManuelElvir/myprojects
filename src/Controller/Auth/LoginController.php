@@ -21,7 +21,7 @@ class LoginController extends AbstractController
 
         $redirect = $request->getPathInfo();
         if($redirect === '/login') {
-            $redirect = "/";
+            $redirect = "/app";
         }
  
         return $this->render('auth/login.html.twig', [

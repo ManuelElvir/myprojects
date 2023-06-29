@@ -6,7 +6,6 @@ use App\Message\NewUserMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class DashboardController extends AbstractController
@@ -20,8 +19,11 @@ class DashboardController extends AbstractController
         $user = $this->getUser();
 
         
-        return $this->render('dashboard/index.html.twig', [
-            'user' => $user
+        return $this->render('user/dashboard/index.html.twig', [
+            'user' => $user,
+            'tasks' => [1, 2, 3, 4, 5],
+            'activities' => [1, 2, 3, 4, 5, 6, 7, 8],
+            'milestones' => [1, 2],
         ]);
     }
 
@@ -31,6 +33,6 @@ class DashboardController extends AbstractController
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        return $this->render('dashboard/stats.html.twig', []);
+        return $this->render('user/dashboard/stats.html.twig', []);
     }
 }

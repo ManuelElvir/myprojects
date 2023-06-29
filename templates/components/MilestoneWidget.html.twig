@@ -1,0 +1,26 @@
+<div class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+    <div class="flex flex-col justify-between gap-2 p-4 xl:p-4">
+        <div class="">
+            <h5 class="mb-2 text-sm font-medium leading-tight text-gray-700 dark:text-gray-300">
+                {{project}} - 
+                <span class="font-regular text-gray-500 dark:text-gray-400">{{ endDate}}</span>
+            </h5>
+            <a href="#" class="mb-4 text-base text-neutral-800 dark:text-neutral-200">
+                {{title}}
+            </a>
+        </div>
+        <div class="flex flex-row gap-6">
+            <div class="flex flex-row">
+                {% set index = 200 %}
+                {% for workerAvatar in workersAvatar %}
+				    <img class="h-6 w-6 mr-[-12px] rounded-full" style="z-index:{{index}};" src="{{workerAvatar}}" alt="">
+                    {% set index = index - 1 %}
+                {% endfor %}
+            </div>
+            <div class="">
+				<img class="h-6 w-6 rounded-full" src="{{ownerAvatar}}" alt="">
+            </div>
+        </div>
+    </div>
+	
+</div>

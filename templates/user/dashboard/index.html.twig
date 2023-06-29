@@ -1,14 +1,77 @@
 {% extends 'user/base.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Dashboard
+{% endblock %}
 
-{% block heading %}Dashboard{% endblock %}
+{% block heading %}Dashboard
+{% endblock %}
 
 {% block content %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<style>
+		.example-wrapper {
+			margin: 1em auto;
+			max-width: 800px;
+			width: 95%;
+			font: 18px / 1.5 sans-serif;
+		}
+		.example-wrapper code {
+			background: #F5F5F5;
+			padding: 2px 6px;
+		}
+	</style>
 
-Home index.html
+	<div class="w-full">
+		<div class="flex lg:flex-row sm:flex-col gap-8">
+			<div class="lg:basis-2/3 sm:basis-full">
+				<h5 class="mb-4 mt-0 text-lg font-medium leading-tight text-primary-900">
+					Your Tasks
+				</h5>
+				<div class="grid grid-cols-2 xl:grid-cols-3 gap-4">
+					{% for task in tasks %}
+                        {{ component('TaskWidget', { 
+                            title: 'Name of the Task',
+                            project: 'Project Name',
+                            milestone: 'Milestone Name',
+                            workerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+                            ownerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                            }) 
+                        }}
+					{% endfor %}
+				</div>
+				<h5 class="mb-4 mt-12 text-lg font-medium leading-tight text-primary-900">
+					Active Milestones
+				</h5>
+				<div class="grid grid-cols-2 xl:grid-cols-3 gap-4">
+					{% for milestone in milestones %}
+                        {{ component('MilestoneWidget', { 
+                            title: 'Name of the Milestone',
+                            project: 'Project Name',
+							endDate: '29-06-2023',
+                            workersAvatar: [
+								'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+								'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+								'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+								'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+							],
+                            ownerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                            }) 
+                        }}
+					{% endfor %}
+				</div>
+			</div>
+			<div class="lg:basis-1/3 sm:hidden lg:block px-2">
+				<h5 class="mb-4 mt-0 text-lg font-medium leading-tight text-primary-900">
+					Recent Activity
+				</h5>
+                {% for activity in activities %}
+                    {{ component('ActivityWidget', { 
+                        date: '15 hours ago',
+                        title: 'New message in task Mobile design',
+                        link: '#',
+                        }) 
+                    }}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 {% endblock %}
