@@ -12,6 +12,6 @@ class MilestoneWidget
     /** 
      * @var string[] $workersAvatar 
     */
-    public array $workersAvatar;
+    public array $workersAvatar; 
     public string $ownerAvatar;
 }
