@@ -23,7 +23,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.ACTIONS_DEPLOY_KEY }}
 
-      - name: Build and Publish Docker image
+      - name: Build and Publish Docker image 
         run: |
           docker buildx create --use
           docker buildx build --push --tag ghcr.io/${{ github.repository }}:latest .
