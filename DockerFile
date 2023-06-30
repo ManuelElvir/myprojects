@@ -51,6 +51,9 @@ RUN yarn install
 RUN yarn build
 # RUN yarn watch
 
+# Create the folder var
+RUN mkdir var
+
 # Définir les autorisations pour le répertoire des caches
 RUN chown -R www-data:www-data var
 
