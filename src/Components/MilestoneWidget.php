@@ -9,6 +9,7 @@ class MilestoneWidget
     public string $title;
     public string $project;
     public string $endDate;
+    public string $status;
     /** 
      * @var string[] $workersAvatar 
     */
