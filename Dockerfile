@@ -61,7 +61,7 @@ RUN chown -R www-data:www-data var
 RUN a2enmod rewrite
 
 # install browser extension
-RUN apt-get install chromium-chromedriver firefox-geckodriver
+# RUN apt-get install chromium-chromedriver firefox-geckodriver
 
 # Exposez le port 80 pour Apache
 EXPOSE 80
