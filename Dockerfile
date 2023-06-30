@@ -51,10 +51,13 @@ RUN yarn install
 RUN yarn build
 # RUN yarn watch
 
+# Create the folder var
+RUN mkdir var
+
 # Définir les autorisations pour le répertoire des caches
 RUN chown -R www-data:www-data var
 
-# Activez le module Apache mod_rewrite
+# Activez le module Apache mod_rewrite 
 RUN a2enmod rewrite
 
 # install browser extension
