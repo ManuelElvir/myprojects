@@ -17,9 +17,33 @@
 	</head>
 	<body class="h-full">
 		<div class="min-h-full">
-			<nav class="fixed bg-gray-100 dark:bg-gray-800 top-0 z-50 border-b border-gray-200 dark:border-gray-700 w-full">
+			<nav class="fixed bg-gray-100 dark:bg-gray-800 top-0 z-70 border-b border-gray-200 dark:border-gray-700 w-full">
 				<div class="mx-auto max-w-12xl px-4 sm:px-6 lg:px-8">
 					<div class="flex h-16 items-center justify-between">
+						<!-- Mobile menu button -->
+						<div
+							class="-mr-2 flex md:hidden">
+							<button 
+								type="button" 
+								class="inline-flex cursor-pointer items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+								data-te-sidenav-toggle-ref
+								data-te-target="#mobile-menu"
+								aria-controls="#mobile-menu"
+								aria-haspopup="true"
+								
+								>
+								<span class="sr-only">Open main menu</span>
+								<!-- Menu open: "hidden", Menu closed: "block" -->
+								<svg class="block h-6 w-6" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+								</svg>
+								<!-- Menu open: "block", Menu closed: "hidden" -->
+								<svg class="hidden h-6 w-6" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+								</svg>
+							</button>
+						</div>
+
 						<div class="flex items-center">
 							<div class="flex-shrink-0">
 								<img class="h-8 w-8" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
@@ -35,9 +59,9 @@
 								</div>
 							</div>
 						</div>
-						<div class="hidden md:block">
+						<div class="flex">
 							<div class="ml-4 flex items-center md:ml-6">
-								<div class="relative flex md:w-[200px] xl:w-[350px] flex-wrap items-stretch">
+								<div class="relative hidden md:flex md:w-[200px] xl:w-[350px] flex-wrap items-stretch">
 									<input
 									type="search" class="relative m-0 block w-[1px] min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary" placeholder="Search" aria-label="Search" aria-describedby="button-addon2"/>
 
@@ -56,82 +80,35 @@
 								</button>
 
 								<!-- Profile dropdown -->
-								<div class="relative ml-3" data-te-dropdown-ref>
-									<button type="button" class="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="false" data-te-dropdown-toggle-ref data-te-ripple-init data-te-ripple-color="light">
+								
+								<div class="relative ml-3 flex item-center" data-te-dropdown-ref>
+									<button class="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" type="button" id="dropdownMenuButton1" data-te-dropdown-toggle-ref aria-expanded="false" data-te-ripple-init data-te-ripple-color="light">
 										<span class="sr-only">Open user menu</span>
 										<img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
 									</button>
-
-                                    <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none [&amp;[data-te-dropdown-show]]:block" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1" data-te-dropdown-menu-ref="" style="">
-										<!-- Active: "bg-gray-100", Not Active: "" -->
-										<a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-										<a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-										<a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+									<div class="absolute z-[1000] right-0 py-1 mt-2 w-48 origin-top-right rounded-md bg-white py-1 hidden min-w-max overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block" aria-labelledby="dropdownMenuButton1" data-te-dropdown-menu-ref>
+										<a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600" href="#" data-te-dropdown-item-ref>Your Profile</a>
+										<a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600" href="#" data-te-dropdown-item-ref>Settings</a>
+										<a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600" href="#" data-te-dropdown-item-ref>Sign out</a>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div
-							class="-mr-2 flex md:hidden">
-							<!-- Mobile menu button -->
-							<button type="button" class="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" aria-controls="mobile-menu" aria-expanded="false">
-								<span class="sr-only">Open main menu</span>
-								<!-- Menu open: "hidden", Menu closed: "block" -->
-								<svg class="block h-6 w-6" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-								</svg>
-								<!-- Menu open: "block", Menu closed: "hidden" -->
-								<svg class="hidden h-6 w-6" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-								</svg>
-							</button>
-						</div>
 					</div>
 				</div>
-
-				<!-- Mobile menu, show/hide based on menu state. -->
-				<div class="md:hidden" id="mobile-menu">
-					<div
-						class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-						<!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-						<a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Dashboard</a>
-						<a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Team</a>
-						<a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Projects</a>
-						<a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Calendar</a>
-						<a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Reports</a>
-					</div>
-					<div class="border-t border-gray-700 pb-3 pt-4">
-						<div class="flex items-center px-5">
-							<div class="flex-shrink-0">
-								<img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-							</div>
-							<div class="ml-3">
-								<div class="text-base font-medium leading-none text-white">Tom Cook</div>
-								<div class="text-sm font-medium leading-none text-gray-400">tom@example.com</div>
-							</div>
-							<button type="button" class="ml-auto flex-shrink-0 rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-								<span class="sr-only">View notifications</span>
-								<svg class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
-								</svg>
-							</button>
-						</div>
-						<div class="mt-3 space-y-1 px-2">
-							<a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Your Profile</a>
-							<a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Settings</a>
-							<a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Sign out</a>
-						</div>
-					</div>
-				</div>
+				
 			</nav>
 			{% include 'layouts/sidebar.html.twig' with {'user': user} %}
 			<div class="p-4 md:ml-64 mt-14">
 				<main>
-					<div class="mx-auto py-6 sm:px-2 md:px-4 lg:px-8"> 
-						{% block content %}{% endblock %}
-					</div>
-				</main>
+					<div class="mx-auto py-6 sm:px-2 md:px-4 lg:px-8"> {% block content %}{% endblock %}
+						</div>
+					</main>
+				</div>
 			</div>
-		</div>
-	</body>
-</html>
+		<script>
+			const mobileMenu = document.getElementById('mobile-menu');
+			const buttonMenu = document.getElementById('button-menu');
+		</script>
+		</body>
+	</html>

@@ -12,5 +12,5 @@ import 'tw-elements';
 import './styles/app.scss';
 import './styles/sign.scss';
 
-import { Select, initTE, Dropdown, Ripple} from "tw-elements";
-initTE({ Select, Dropdown, Ripple });
+import { Select, initTE, Dropdown, Sidenav, Ripple} from "tw-elements";
+initTE({ Select, Dropdown, Sidenav, Ripple });
