@@ -17,7 +17,7 @@
 	</head>
 	<body class="h-full">
 		<div class="min-h-full">
-			<nav class="fixed bg-gray-100 dark:bg-gray-800 top-0 z-70 border-b border-gray-200 dark:border-gray-700 w-full">
+			<nav class="fixed bg-gray-100 dark:bg-gray-800 top-0 z-[70] border-b border-gray-200 dark:border-gray-700 w-full">
 				<div class="mx-auto max-w-12xl px-4 sm:px-6 lg:px-8">
 					<div class="flex h-16 items-center justify-between">
 						<!-- Mobile menu button -->
@@ -25,7 +25,7 @@
 							class="-mr-2 flex md:hidden">
 							<button 
 								type="button" 
-								class="inline-flex cursor-pointer items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+								class="inline-flex cursor-pointer items-center justify-center rounded-md border border-solid border-neutral-300 p-2 text-gray-700 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
 								data-te-sidenav-toggle-ref
 								data-te-target="#mobile-menu"
 								aria-controls="#mobile-menu"
@@ -52,8 +52,8 @@
 								<div
 									class="ml-10 flex items-baseline space-x-4">
 									<!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-									<a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
-									<a href="#" class="text-gray-800 dark:text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Teams</a>
+									<a href="{{ path('app_home') }}" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
+									<a href="{{ path('app_teams') }}" class="text-gray-800 dark:text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Teams</a>
 									<a href="#" class="text-gray-800 dark:text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Projects</a>
 									<a href="#" class="text-gray-800 dark:text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Activity</a>
 								</div>
@@ -106,9 +106,5 @@
 					</main>
 				</div>
 			</div>
-		<script>
-			const mobileMenu = document.getElementById('mobile-menu');
-			const buttonMenu = document.getElementById('button-menu');
-		</script>
 		</body>
 	</html>
