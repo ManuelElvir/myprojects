@@ -3,6 +3,7 @@
 namespace App\Controller\User;
 
 use App\Repository\TeamRepository;
+use App\Entity\Team;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,16 +72,30 @@ class TeamController extends AbstractController
         ]);
     }
 
-    #[Route('/app/teams/{teamId}/edit', name: 'app_teams_edit', methods: ['GET', 'PUT'])]
+    #[Route('/app/teams/{teamId}/edit', name: 'app_teams_edit', methods: ['PUT'])]
     public function edit(int $teamId, Request $request, TeamRepository $teamRepository): Response
     {
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
+        $submittedToken = $request->request->get('token');
+        $teamName = $request->request->get('team_name');
 
-        return $this->render('user/team/edit.html.twig', [
-            'user' => $user,
-            'teams' => [0, 1, 2, 3, 4, 5, 6],
-        ]);
+        $result = array('success' => false);
+        
+        if (!$this->isCsrfTokenValid('edit-team', $submittedToken)) {
+            // $this->addFlash('error', 'Invalid token or you cannot perform this action');
+            $result['message'] = array('type' => 'error', 'message' => 'Invalid token or you cannot perform this action');
+            return new Response(json_encode($result), );
+        }
+
+        /**
+         * @var Team $team
+         */
+        $team = $teamRepository->find($teamId);
+        if($team::class === Team::class){
+            $team->setTeamName($teamName);
+            $teamRepository->flush();
+        }
+
+        return $this->redirectToRoute('app_teams_view');
     }
 
     #[Route('/app/teams/{teamId}', name: 'app_teams_delete', methods: ['DELETE'])]

@@ -4,7 +4,8 @@
 		<meta charset="UTF-8">
 		<title>
 			{% block title %}Welcome!
-			{% endblock %} - My Projects
+			{% endblock %}
+			- My Projects
 		</title>
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
 		{% block stylesheets %}
@@ -19,19 +20,11 @@
 		<div class="min-h-full">
 			<nav class="fixed bg-gray-100 dark:bg-gray-800 top-0 z-[70] border-b border-gray-200 dark:border-gray-700 w-full">
 				<div class="mx-auto max-w-12xl px-4 sm:px-6 lg:px-8">
-					<div class="flex h-16 items-center justify-between">
+					<div
+						class="flex h-16 items-center justify-between">
 						<!-- Mobile menu button -->
-						<div
-							class="-mr-2 flex md:hidden">
-							<button 
-								type="button" 
-								class="inline-flex cursor-pointer items-center justify-center rounded-md border border-solid border-neutral-300 p-2 text-gray-700 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-								data-te-sidenav-toggle-ref
-								data-te-target="#mobile-menu"
-								aria-controls="#mobile-menu"
-								aria-haspopup="true"
-								
-								>
+						<div class="-mr-2 flex md:hidden">
+							<button type="button" class="inline-flex cursor-pointer items-center justify-center rounded-md border border-solid border-neutral-300 p-2 text-gray-700 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" data-te-sidenav-toggle-ref data-te-target="#mobile-menu" aria-controls="#mobile-menu" aria-haspopup="true">
 								<span class="sr-only">Open main menu</span>
 								<!-- Menu open: "hidden", Menu closed: "block" -->
 								<svg class="block h-6 w-6" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -80,7 +73,7 @@
 								</button>
 
 								<!-- Profile dropdown -->
-								
+
 								<div class="relative ml-3 flex item-center" data-te-dropdown-ref>
 									<button class="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" type="button" id="dropdownMenuButton1" data-te-dropdown-toggle-ref aria-expanded="false" data-te-ripple-init data-te-ripple-color="light">
 										<span class="sr-only">Open user menu</span>
@@ -96,15 +89,17 @@
 						</div>
 					</div>
 				</div>
-				
+
 			</nav>
 			{% include 'layouts/sidebar.html.twig' with {'user': user} %}
 			<div class="p-4 md:ml-64 mt-14">
 				<main>
-					<div class="mx-auto py-6 sm:px-2 md:px-4 lg:px-8"> {% block content %}{% endblock %}
-						</div>
-					</main>
-				</div>
+					<div class="mx-auto py-6 sm:px-2 md:px-4 lg:px-8"> 
+						{% block content %}{% endblock %}
+					</div>
+				</main>
 			</div>
-		</body>
-	</html>
+			<div id="toast-container"></div>
+		</div>
+	</body>
+</html>
