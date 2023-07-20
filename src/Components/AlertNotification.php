@@ -9,4 +9,5 @@ class AlertNotification
 {
     public string $type;
     public string $message;
+    public bool $closable = true;
 }

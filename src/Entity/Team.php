@@ -39,6 +39,7 @@ class Team
     public function onPrePersist()
     {
         $this->createdAt = new \DateTime("now");
+        $this->updatedAt = new \DateTime("now");
     }
 
     #[ORM\PreUpdate]
@@ -51,6 +52,8 @@ class Team
     {
         $this->teammates = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->createdAt = new \DateTime("now");
+        $this->updatedAt = new \DateTime("now");
     }
 
     public function getId(): ?int

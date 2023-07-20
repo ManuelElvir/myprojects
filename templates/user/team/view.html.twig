@@ -43,21 +43,21 @@
 
 			<div class="flex lg:flex-row flex-col gap-8 min-w-full py-2">
 				<div class="lg:basis-2/3 basis-full bg-white rounded p-4">
-					{% for flashMessage in app.session.flashbag.get('error') %}
+					{% for message in app.session.flashbag.get('error') %}
 						{{ component('AlertNotification', { 
 							type: 'error',
 							message: message,
 							}) 
 						}}
 					{% endfor %}
-					{% for flashMessage in app.session.flashbag.get('success') %}
+					{% for message in app.session.flashbag.get('success') %}
 						{{ component('AlertNotification', { 
 							type: 'success',
 							message: message,
 							}) 
 						}}
 					{% endfor %}
-					{% for flashMessage in app.session.flashbag.get('notice') %}
+					{% for message in app.session.flashbag.get('notice') %}
 						{{ component('AlertNotification', { 
 							type: 'notice',
 							message: message,
@@ -282,9 +282,11 @@
 		const token = {{ csrf_token('edit-token') }}
 		const toastCount = 0;
 
+		const editUrl = {{ path('app_teams_edit'), {teamId: 1} }}
+
 		teamEditBtn.addEventListener('click', function(e) {
 			const team_name = document.getElementById('team_name')?.value;
-			fetch({{ path('app_teams_edit') }}, {
+			fetch(editUrl, {
 					method: 'PUT',
 					body: {
 						token,

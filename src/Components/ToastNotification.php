@@ -5,7 +5,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 
 #[AsTwigComponent]
-class AlertNotification
+class ToastNotification
 {
     public string $type;
     public string $title;

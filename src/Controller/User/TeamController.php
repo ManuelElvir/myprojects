@@ -33,13 +33,13 @@ class TeamController extends AbstractController
 
             $userId = $user->getId();
             if(is_int($userId)) {
-                $teams = $teamRepository->findByUser($userId);
+                $teams = $teamRepository->findByUser($userId, orderBy: $orderBy, orderDirection: $orderDirection, limit: $limit, offset: $offset);
             }
         }
 
         return $this->render('user/team/index.html.twig', [
             'user' => $user,
-            'teams' => [0, 1, 2, 3, 4, 5, 6],
+            'teams' => $teams,
         ]);
     }
 
@@ -66,10 +66,22 @@ class TeamController extends AbstractController
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        return $this->render('user/team/edit.html.twig', [
-            'user' => $user,
-            'teams' => [0, 1, 2, 3, 4, 5, 6],
-        ]);
+        $submittedToken = $request->request->get('token');
+        $teamName = $request->request->get('team_name');
+        
+        if (!$this->isCsrfTokenValid('add-team', $submittedToken)) {
+            $this->addFlash('error', 'Invalid token or you cannot perform this action');
+            return $this->redirectToRoute('app_teams');
+        }
+
+         /**
+         * @var Team $team
+         */
+        $team = new Team();
+        $team->setTeamName($teamName);
+        $team->setOwner($user);
+        $teamRepository->save($team, true);
+        return $this->redirectToRoute('app_teams_view', array('teamId' => $team->getId()));
     }
 
     #[Route('/app/teams/{teamId}/edit', name: 'app_teams_edit', methods: ['PUT'])]
