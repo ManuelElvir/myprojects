@@ -4,7 +4,9 @@ namespace App\Controller\User;
 
 use App\Repository\TeamRepository;
 use App\Entity\Team;
-use Doctrine\ORM\EntityManager;
+use App\Entity\Teammate;
+use App\Service\TeamUtils;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +29,7 @@ class TeamController extends AbstractController
         $teams = [];
 
         if ($owner==="me") {
-            $teams = $teamRepository->findBy(['owner_id' => $user->getId()]);
+            $teams = $teamRepository->findBy(['owner' => $user]);
         }
         else {
 
@@ -40,6 +42,7 @@ class TeamController extends AbstractController
         return $this->render('user/team/index.html.twig', [
             'user' => $user,
             'teams' => $teams,
+            'isOwned' => $owner === 'me'
         ]);
     }
 
@@ -61,7 +64,7 @@ class TeamController extends AbstractController
     }
 
     #[Route('/app/teams/add', name: 'app_teams_add', methods: ['GET', 'POST'])]
-    public function add(Request $request, TeamRepository $teamRepository): Response
+    public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -74,13 +77,28 @@ class TeamController extends AbstractController
             return $this->redirectToRoute('app_teams');
         }
 
-         /**
+        /**
          * @var Team $team
          */
         $team = new Team();
-        $team->setTeamName($teamName);
-        $team->setOwner($user);
-        $teamRepository->save($team, true);
+        $team->setTeamName($teamName)
+            ->setOwner($user)
+            ->setSlug(TeamUtils::slugify($teamName));
+        $entityManager->persist($team);
+
+        // Save the first teammate
+        /**
+         * @var Teammate $teammate
+         */
+        $teammate = new Teammate();
+        $teammate->setTeam($team)
+            ->setUser($user)
+            ->setRole('admin');
+
+        $entityManager->persist($teammate);
+        $entityManager->flush();
+
+
         return $this->redirectToRoute('app_teams_view', array('teamId' => $team->getId()));
     }
 

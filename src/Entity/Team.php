@@ -7,8 +7,11 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[UniqueEntity(fields: ['slug'], message: 'This team name is already used')]
 class Team
 {
     #[ORM\Id]
@@ -18,6 +21,9 @@ class Team
 
     #[ORM\Column(length: 100)]
     private ?string $team_name = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $slug = null;
 
     #[ORM\ManyToOne(inversedBy: 'teams')]
     #[ORM\JoinColumn(nullable: false)]
@@ -52,8 +58,6 @@ class Team
     {
         $this->teammates = new ArrayCollection();
         $this->projects = new ArrayCollection();
-        $this->createdAt = new \DateTime("now");
-        $this->updatedAt = new \DateTime("now");
     }
 
     public function getId(): ?int
@@ -69,6 +73,18 @@ class Team
     public function setTeamName(string $team_name): self
     {
         $this->team_name = $team_name;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

@@ -1,9 +1,9 @@
 {% extends 'user/base.html.twig' %}
 
-{% block title %}Dashboard
+{% block title %}My Teams
 {% endblock %}
 
-{% block heading %}Dashboard
+{% block heading %}My Teams
 {% endblock %}
 
 {% block content %}
@@ -25,7 +25,11 @@
 					</div>
 				</div>
 				<div class="flex gap-4 items-center">
-					<a class="text-indigo-600 font-semibold hover:underline text-sm" href="{{ path('app_teams', {'owner': 'me' }) }}">Only my teams</a>
+					{% if isOwned %}
+						<a class="text-indigo-600 font-semibold hover:underline text-sm" href="{{ path('app_teams') }}">Show all</a>
+					{% else %}
+						<a class="text-indigo-600 font-semibold hover:underline text-sm" href="{{ path('app_teams', {'owner': 'me' }) }}">Only my teams</a>
+					{% endif %}
 					<button type="button" data-te-toggle="modal" data-te-target="#modalAddTeam" data-te-ripple-init data-te-ripple-color="light" class="inline-block rounded bg-indigo-600 px-6 pb-2 pt-2.5 text-sm font-semibold leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">
 						New Team
 					</button>
@@ -44,7 +48,7 @@
 			
 
 			<div class="inline-block min-w-full py-2">
-				<div class="overflow-hidden">
+				<div class="">
 					<ul role="list" class="divide-y divide-gray-200">
 						{% set index = 1 %}
                         {% for team in teams %}
@@ -56,7 +60,7 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"/>
                                                 </svg>
-                                                <a class="font-medium ml-2 hover:underline" href="{{ path('app_teams_view', {'teamId': 1}) }}" style="pointer-events: all;">{{team.team_name|capitalize}}</a>
+                                                <a class="font-medium ml-2 hover:underline" href="{{ path('app_teams_view', {'teamId': team.id}) }}" style="pointer-events: all;">{{team.teamName|capitalize}}</a>
                                             </div>
                                             <div class="">
                                                 {% if team.owner.id == user.id %}
@@ -66,7 +70,7 @@
                                             <div class="whitespace-nowrap px-6">
                                                 <div class="flex flex-row -space-x-1 overflow-hidden">
                                                     {% for teammate in team.teammates %}
-                                                        <img class="inline-block h-6 w-6 rounded-full ring-2 ring-white" src="{{ teammate.user.avatar_url}}" alt="{{ teammate.user.first_name|first }} {{ teammate.user.last_name|first }}">
+                                                        <img class="inline-block h-6 w-6 rounded-full ring-2 ring-white" src="{{ teammate.user.avatarUrl}}" alt="{{ teammate.user.firstName|first }} {{ teammate.user.lastName|first }}">
                                                     {% endfor %}
                                                 </div>
                                             </div>
@@ -77,13 +81,13 @@
 											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
 												<path stroke-linecap="round" stroke-linejoin="round" d="M7.875 14.25l1.214 1.942a2.25 2.25 0 001.908 1.058h2.006c.776 0 1.497-.4 1.908-1.058l1.214-1.942M2.41 9h4.636a2.25 2.25 0 011.872 1.002l.164.246a2.25 2.25 0 001.872 1.002h2.092a2.25 2.25 0 001.872-1.002l.164-.246A2.25 2.25 0 0116.954 9h4.636M2.41 9a2.25 2.25 0 00-.16.832V12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 12V9.832c0-.287-.055-.57-.16-.832M2.41 9a2.25 2.25 0 01.382-.632l3.285-3.832a2.25 2.25 0 011.708-.786h8.43c.657 0 1.281.287 1.709.786l3.284 3.832c.163.19.291.404.382.632M4.5 20.25h15A2.25 2.25 0 0021.75 18v-2.625c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125V18a2.25 2.25 0 002.25 2.25z"/>
 											</svg>
-											{{ team.teammates|length }}
+											{{ team.projects|length }}
 										</span>
 										<span class="flex gap-2 items-center text-xs">
 											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
 												<path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/>
 											</svg>
-											{{ team.projects|length }}
+											{{ team.teammates|length }}
 										</span>
 										<div class="relative" data-te-dropdown-ref>
 											<button class="flex items-center whitespace-nowrap rounded px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-gray-500 transition duration-150 ease-in-out hover:bg-slate-200 focus:bg-slate-200 focus:outline-none focus:ring-0 active:bg-slate-200  motion-reduce:transition-none " type="button" id="dropdownTeamButton{{ index }}" data-te-dropdown-toggle-ref aria-expanded="false" data-te-ripple-init data-te-ripple-color="light" style="pointer-events: all;">
@@ -93,7 +97,7 @@
 											</button>
 											<ul style="pointer-events: all;" class="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block" aria-labelledby="dropdownTeamButton{{ index }}" data-te-dropdown-menu-ref >
 												<li>
-													<a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600" href="{{ path('app_teams_edit', {'teamId': 1}) }}" data-te-dropdown-item-ref>Edit</a>
+													<a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600" href="{{ path('app_teams_edit', {'teamId': team.id}) }}" data-te-dropdown-item-ref>Edit</a>
 												</li>
 												<li>
 													<a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600" href="#" data-te-dropdown-item-ref>Leave team</a>
@@ -105,7 +109,7 @@
 										</div>
 									</div>
 								</div>
-                                <a href="{{ path('app_teams_view', {'teamId': 1}) }}" class="absolute bottom-0 right-0 top-0 left-0"></a>
+                                <a href="{{ path('app_teams_view', {'teamId': team.id}) }}" class="absolute bottom-0 right-0 top-0 left-0"></a>
 							</li>
                             {% set index = index + 1 %}
 						{% endfor %}
@@ -148,11 +152,11 @@
 						<input type="hidden" name="token" value="{{ csrf_token('add-team') }}">
 
 						<!--Modal footer-->
-						<div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
-							<button id="teamEditBtn" type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
+						<div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50 gap-1">
+							<button id="teamEditBtn" type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
 								Close
 							</button>
-							<button type="submit" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
+							<button type="submit" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
 								Create team
 							</button>
 						</div>
@@ -201,11 +205,12 @@
 	</div>
 
 	<script>
-		let deleteUrl = '{{ path('app_teams_delete', {'teamId': 1}) }}';
+		let deleteUrl = '{{ path('app_teams_delete', {'teamId': 'team-id'}) }}';
 		const deleteTeamBtn = document.getElementById('delete-team');
 		const token = '{{ csrf_token('delete-token') }}'
 
 		deleteTeamBtn.addEventListener('click', function(e) {
+			
 			const team_name = document.getElementById('team_name')?.value;
 			fetch(deleteUrl, {
 					method: 'DELETE',
