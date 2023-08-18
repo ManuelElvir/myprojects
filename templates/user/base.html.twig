@@ -95,6 +95,29 @@
 			<div class="p-4 md:ml-64 mt-14">
 				<main>
 					<div class="mx-auto py-6 sm:px-2 md:px-4 lg:px-8"> 
+					
+						{% for message in app.session.flashbag.get('error') %}
+							{{ component('AlertNotification', { 
+								type: 'error',
+								message: message,
+								}) 
+							}}
+						{% endfor %}
+						{% for message in app.session.flashbag.get('success') %}
+							{{ component('AlertNotification', { 
+								type: 'success',
+								message: message,
+								}) 
+							}}
+						{% endfor %}
+						{% for message in app.session.flashbag.get('notice') %}
+							{{ component('AlertNotification', { 
+								type: 'notice',
+								message: message,
+								}) 
+							}}
+						{% endfor %}
+						
 						{% block content %}{% endblock %}
 					</div>
 				</main>

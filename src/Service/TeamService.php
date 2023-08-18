@@ -2,19 +2,24 @@
 
 namespace App\Service;
 
+use App\Repository\TeamRepository;
 
 /**
  * This class implements utils methods for teams.
  * 
  * */
-final class TeamUtils
+final class TeamService
 {
+    public function __construct(private TeamRepository $teamRepository)
+    {
+        
+    }
 
     /**
      * Create a slug based on the team name
      * 
-     * @var string $name
-     * @var string $divider
+     * @param string $name
+     * @param string $divider
      * @return string
      */
     public static function slugify($name, string $divider = '-'):string
@@ -42,5 +47,23 @@ final class TeamUtils
         }
 
         return $name;
+    }
+
+    /**
+     * Find if a slug already exists
+     * 
+     * @param string $name
+     * @return boolean
+     */
+    public function slugExists(string $name, ): bool
+    {
+        $slug = self::slugify($name);
+
+        $team = $this->teamRepository->findOneBy(['slug'=> $slug]);
+        if($team) {
+            return true;
+        }
+        
+        return false;
     }
 }

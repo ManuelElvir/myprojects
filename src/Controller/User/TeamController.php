@@ -5,8 +5,9 @@ namespace App\Controller\User;
 use App\Repository\TeamRepository;
 use App\Entity\Team;
 use App\Entity\Teammate;
-use App\Service\TeamUtils;
+use App\Service\TeamService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TeamController extends AbstractController
 {
-    #[Route('/app/team', name: 'app_teams', methods: ['GET'])]
+    #[Route('/app/teams', name: 'app_teams', methods: ['GET'])]
     public function index(Request $request, TeamRepository $teamRepository): Response
     {
         /** @var \App\Entity\User $user */
@@ -32,7 +33,6 @@ class TeamController extends AbstractController
             $teams = $teamRepository->findBy(['owner' => $user]);
         }
         else {
-
             $userId = $user->getId();
             if(is_int($userId)) {
                 $teams = $teamRepository->findByUser($userId, orderBy: $orderBy, orderDirection: $orderDirection, limit: $limit, offset: $offset);
@@ -46,15 +46,15 @@ class TeamController extends AbstractController
         ]);
     }
 
-    #[Route('/app/teams/{teamId}', name: 'app_teams_view', methods: ['GET'])]
-    public function view(int $teamId, Request $request, TeamRepository $teamRepository): Response
+    #[Route('/app/teams/{slug}', name: 'app_teams_view', methods: ['GET'])]
+    public function view(string $slug, Request $request, TeamRepository $teamRepository): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        $team =  $teamRepository->find($teamId);
-        if($team) {
-
+        $team =  $teamRepository->findOneBy(['slug' => $slug]);
+        if(!$team) {
+            throw new Exception('Team not found', 404);
         }
         
         return $this->render('user/team/view.html.twig', [
@@ -83,7 +83,7 @@ class TeamController extends AbstractController
         $team = new Team();
         $team->setTeamName($teamName)
             ->setOwner($user)
-            ->setSlug(TeamUtils::slugify($teamName));
+            ->setSlug(TeamService::slugify($teamName));
         $entityManager->persist($team);
 
         // Save the first teammate
@@ -102,34 +102,49 @@ class TeamController extends AbstractController
         return $this->redirectToRoute('app_teams_view', array('teamId' => $team->getId()));
     }
 
-    #[Route('/app/teams/{teamId}/edit', name: 'app_teams_edit', methods: ['PUT'])]
-    public function edit(int $teamId, Request $request, TeamRepository $teamRepository): Response
+    #[Route('/app/teams/{slug}/edit', name: 'app_teams_edit', methods: ['PUT', 'POST'])]
+    public function edit(string $slug, Request $request, EntityManagerInterface $entityManager, TeamService $teamService): Response
     {
         $submittedToken = $request->request->get('token');
         $teamName = $request->request->get('team_name');
 
-        $result = array('success' => false);
+        // $result = array('success' => false);
         
         if (!$this->isCsrfTokenValid('edit-team', $submittedToken)) {
-            // $this->addFlash('error', 'Invalid token or you cannot perform this action');
-            $result['message'] = array('type' => 'error', 'message' => 'Invalid token or you cannot perform this action');
-            return new Response(json_encode($result), );
+            $this->addFlash('error', 'Invalid token or you cannot perform this action');
+            // $result['message'] = array('type' => 'error', 'message' => 'Invalid token or you cannot perform this action');
+            // return new Response(json_encode($result));
+
+            return $this->redirectToRoute('app_teams_view', array('slug' => $slug));
         }
 
         /**
          * @var Team $team
          */
-        $team = $teamRepository->find($teamId);
-        if($team::class === Team::class){
-            $team->setTeamName($teamName);
-            $teamRepository->flush();
+        $team =  $entityManager->getRepository(Team::class)->findOneBy(['slug' => $slug]);
+
+        if(!$team) {
+            throw new Exception('Team not found', 404);
         }
 
-        return $this->redirectToRoute('app_teams_view');
+        if($teamService->slugExists($teamName)) {
+            $this->addFlash('error', 'This team name already exists');
+            return $this->redirectToRoute('app_teams_view', array('slug' => $slug));
+        }
+        
+        if($team::class === Team::class) {
+            $team->setTeamName($teamName);
+            $team->setSlug(TeamService::slugify($teamName));
+            $entityManager->flush();
+        }
+            
+        $this->addFlash('success', 'Team updated successfully');
+
+        return $this->redirectToRoute('app_teams_view', array('slug' => $team->getSlug()));
     }
 
-    #[Route('/app/teams/{teamId}', name: 'app_teams_delete', methods: ['DELETE'])]
-    public function delete(int $teamId, Request $request, TeamRepository $teamRepository): Response
+    #[Route('/app/teams/{slug}', name: 'app_teams_delete', methods: ['DELETE'])]
+    public function delete(string $slug, Request $request, TeamRepository $teamRepository): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -142,8 +157,8 @@ class TeamController extends AbstractController
         return new Response(json_encode($result));
     }
 
-    #[Route('/app/teams/{teamId}/add_teammate', name: 'app_teams_add_teammate', methods: ['PATCH'])]
-    public function add_teammate(int $teamId, Request $request, TeamRepository $teamRepository): Response
+    #[Route('/app/teams/{slug}/add_teammate', name: 'app_teams_add_teammate', methods: ['PATCH'])]
+    public function add_teammate(string $slug, Request $request, TeamRepository $teamRepository): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -156,8 +171,8 @@ class TeamController extends AbstractController
         return new Response(json_encode($result));
     }
 
-    #[Route('/app/teams/{teamId}/remove_teammate', name: 'app_teams_remove_teammate', methods: ['PATCH'])]
-    public function remove_teammate(int $teamId, Request $request, TeamRepository $teamRepository): Response
+    #[Route('/app/teams/{slug}/remove_teammate', name: 'app_teams_remove_teammate', methods: ['PATCH'])]
+    public function remove_teammate(string $slug, Request $request, TeamRepository $teamRepository): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
