@@ -5,6 +5,7 @@
 		<title>
 			{% block title %}Welcome!
 			{% endblock %}
+			- My Projects
 		</title>
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
 		{% block stylesheets %}
@@ -17,21 +18,13 @@
 	</head>
 	<body class="h-full">
 		<div class="min-h-full">
-			<nav class="fixed bg-gray-100 dark:bg-gray-800 top-0 z-70 border-b border-gray-200 dark:border-gray-700 w-full">
+			<nav class="fixed bg-gray-100 dark:bg-gray-800 top-0 z-[70] border-b border-gray-200 dark:border-gray-700 w-full">
 				<div class="mx-auto max-w-12xl px-4 sm:px-6 lg:px-8">
-					<div class="flex h-16 items-center justify-between">
+					<div
+						class="flex h-16 items-center justify-between">
 						<!-- Mobile menu button -->
-						<div
-							class="-mr-2 flex md:hidden">
-							<button 
-								type="button" 
-								class="inline-flex cursor-pointer items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-								data-te-sidenav-toggle-ref
-								data-te-target="#mobile-menu"
-								aria-controls="#mobile-menu"
-								aria-haspopup="true"
-								
-								>
+						<div class="-mr-2 flex md:hidden">
+							<button type="button" class="inline-flex cursor-pointer items-center justify-center rounded-md border border-solid border-neutral-300 p-2 text-gray-700 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" data-te-sidenav-toggle-ref data-te-target="#mobile-menu" aria-controls="#mobile-menu" aria-haspopup="true">
 								<span class="sr-only">Open main menu</span>
 								<!-- Menu open: "hidden", Menu closed: "block" -->
 								<svg class="block h-6 w-6" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -52,8 +45,8 @@
 								<div
 									class="ml-10 flex items-baseline space-x-4">
 									<!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-									<a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
-									<a href="#" class="text-gray-800 dark:text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Teams</a>
+									<a href="{{ path('app_home') }}" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
+									<a href="{{ path('app_teams') }}" class="text-gray-800 dark:text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Teams</a>
 									<a href="#" class="text-gray-800 dark:text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Projects</a>
 									<a href="#" class="text-gray-800 dark:text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Activity</a>
 								</div>
@@ -80,35 +73,56 @@
 								</button>
 
 								<!-- Profile dropdown -->
-								
+
 								<div class="relative ml-3 flex item-center" data-te-dropdown-ref>
 									<button class="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" type="button" id="dropdownMenuButton1" data-te-dropdown-toggle-ref aria-expanded="false" data-te-ripple-init data-te-ripple-color="light">
 										<span class="sr-only">Open user menu</span>
-										<img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+										<img class="h-8 w-8 rounded-full" src="{{ user.avatarUrl }}" alt="{{ user.firstName|first }} {{ user.lastName|first }}">
 									</button>
 									<div class="absolute z-[1000] right-0 py-1 mt-2 w-48 origin-top-right rounded-md bg-white py-1 hidden min-w-max overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block" aria-labelledby="dropdownMenuButton1" data-te-dropdown-menu-ref>
 										<a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600" href="#" data-te-dropdown-item-ref>Your Profile</a>
 										<a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600" href="#" data-te-dropdown-item-ref>Settings</a>
-										<a class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600" href="#" data-te-dropdown-item-ref>Sign out</a>
+										<a href="/logout" class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-600" href="#" data-te-dropdown-item-ref>Sign out</a>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				
+
 			</nav>
 			{% include 'layouts/sidebar.html.twig' with {'user': user} %}
 			<div class="p-4 md:ml-64 mt-14">
 				<main>
-					<div class="mx-auto py-6 sm:px-2 md:px-4 lg:px-8"> {% block content %}{% endblock %}
-						</div>
-					</main>
-				</div>
+					<div class="mx-auto py-6 sm:px-2 md:px-4 lg:px-8"> 
+					
+						{% for message in app.session.flashbag.get('error') %}
+							{{ component('AlertNotification', { 
+								type: 'error',
+								message: message,
+								}) 
+							}}
+						{% endfor %}
+						{% for message in app.session.flashbag.get('success') %}
+							{{ component('AlertNotification', { 
+								type: 'success',
+								message: message,
+								}) 
+							}}
+						{% endfor %}
+						{% for message in app.session.flashbag.get('notice') %}
+							{{ component('AlertNotification', { 
+								type: 'notice',
+								message: message,
+								}) 
+							}}
+						{% endfor %}
+						
+						{% block content %}{% endblock %}
+					</div>
+				</main>
 			</div>
-		<script>
-			const mobileMenu = document.getElementById('mobile-menu');
-			const buttonMenu = document.getElementById('button-menu');
-		</script>
-		</body>
-	</html>
+			<div id="toast-container"></div>
+		</div>
+	</body>
+</html>

@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TeammateRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Teammate
 {
     #[ORM\Id]
@@ -21,15 +22,15 @@ class Teammate
     #[ORM\ManyToOne(inversedBy: 'teammates')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
-
-    #[ORM\Column(type: 'json')]
-    private array $roles = [];
     
     #[ORM\Column(type: 'datetime')]
     protected DateTime $createdAt;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     protected DateTime $updatedAt;
+
+    #[ORM\Column(length: 10)]
+    private ?string $role = 'worker';
 
     #[ORM\PrePersist]
     public function onPrePersist()
@@ -72,29 +73,6 @@ class Teammate
         return $this;
     }
 
-    /**
-     * Returns the roles of the teammate in the team.
-     * @return array
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    /**
-     * Defined the roles of the teammate in the team.
-     */
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
@@ -115,6 +93,18 @@ class Teammate
     public function setUpdatedAt(\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }

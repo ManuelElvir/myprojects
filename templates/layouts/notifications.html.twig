@@ -1,0 +1,21 @@
+{% for message in app.session.flashbag.get('error') %}
+	{{ component('AlertNotification', { 
+					type: 'error',
+					message: message,
+					}) 
+				}}
+{% endfor %}
+{% for message in app.session.flashbag.get('success') %}
+	{{ component('AlertNotification', { 
+					type: 'success',
+					message: message,
+					}) 
+				}}
+{% endfor %}
+{% for message in app.session.flashbag.get('notice') %}
+	{{ component('AlertNotification', { 
+					type: 'notice',
+					message: message,
+					}) 
+				}}
+{% endfor %}

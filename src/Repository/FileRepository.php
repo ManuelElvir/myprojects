@@ -52,7 +52,8 @@ class FileRepository extends ServiceEntityRepository
         ): array
     {
         $qb = $this->createQueryBuilder('f');
-
+        $qb->where("1 = 1");
+        
         foreach ($filters as $filter) {
             $qb->andWhere($filter);
         }
