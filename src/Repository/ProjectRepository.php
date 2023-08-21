@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +38,45 @@ class ProjectRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * Find all teams which respect the given criteria.
+     * @return Team[]
+     */
+    public function findByUser(
+        int $userId,
+        array $filters = [], 
+        ?string $orderBy = 'createdAt',
+        ?string $orderDirection = 'desc',
+        int $limit = null,
+        int $offset = null
+        ): array
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb->innerJoin('p.team', 't');
+        $qb->innerJoin('t.teammates', 'tm');
+        $qb->innerJoin('tm.user', 'u', Expr\Join::WITH, "u.id = $userId");
+        $qb->where("1 = 1");
+
+        foreach ($filters as $filter) {
+            $qb->andWhere($filter);
+        }
+        if(!$orderBy || strpos($orderBy, 'p.') === false) {
+            $orderBy = 'p.createdAt';
+        }
+        if(!$orderDirection){
+            $orderDirection = 'desc';
+        }
+        $qb->orderBy($orderBy, $orderDirection);
+        if($limit) {
+            $qb->setMaxResults($limit);
+        }
+        if($offset) {
+            $qb->setFirstResult($offset);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
 //    /**

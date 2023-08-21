@@ -8,9 +8,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[UniqueEntity(fields: ['slug'], message: 'This team name is already used')]
 class Project
 {
     #[ORM\Id]
@@ -25,7 +27,7 @@ class Project
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $progress = null;
+    private ?float $progress = 0;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?Status $status = null;
@@ -60,6 +62,9 @@ class Project
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     protected DateTime $updatedAt;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -330,6 +335,18 @@ class Project
     public function setUpdatedAt(\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

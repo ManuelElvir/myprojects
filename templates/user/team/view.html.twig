@@ -36,9 +36,9 @@
 				</div>
 				<div class="flex gap-4 items-center">
 					{% if team.owner.id == user.id %}
-						<button type="button" class="inline-block rounded bg-indigo-600 px-6 pb-2 pt-2.5 text-sm font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">
+						<a href="{{ path('app_home')}}" class="inline-block rounded bg-indigo-600 px-6 pb-2 pt-2.5 text-sm font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">
 							New Project
-						</button>
+						</a>
 					{% endif %}
 				</div>
 			</div>
@@ -95,32 +95,40 @@
 					<h2 class="text-base font-semibold leading-7 text-gray-900">Members</h2>
 
 					<ul role="list" class="divide-y divide-gray-100 mt-4">
-						{% for member in [1, 2, 3, 4, 5] %}
+						{% for teammate in tema.teammates %}
 							<li class="rounded relative teammate-item px-2">
 								<div class="flex justify-between gap-x-6 py-5 relative z-[1] rounded lg:flex-col xl:flex-row" style="pointer-events: none">
 									<div class="flex gap-x-4">
 										<img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
 										<div class="min-w-0 flex-auto">
 											<p class="text-sm font-semibold leading-6 text-gray-900 hover:underline">
-												<a href="#" style="pointer-events: all;">Leslie Alexander</a>
+												<a href="#" style="pointer-events: all;">{{ teammate.user.fullname }}</a>
 											</p>
-											<p class="mt-1 truncate text-xs leading-5 text-gray-500">leslie.alexander@example.com</p>
+											<p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ teammate.user.email }}</p>
 										</div>
 									</div>
 									<div class="hidden sm:flex sm:flex-col sm:items-end">
-										<p class="text-sm leading-6 text-gray-900">Project Owner</p>
+										{% if team.owner.id == user.id  %}
+											<p class="text-sm leading-6 text-gray-900">Project Owner</p>
+										{% else %}
+											{% if teammate.role == 'admin' %}
+											<p class="text-sm leading-6 text-gray-900">Master</p>
+											{% else %}
+												<p class="text-sm leading-6 text-gray-900">Worker</p>
+											{% endif %}
+										{% endif %}
 										<p class="mt-1 text-xs leading-5 text-gray-500">Last action
 											<time datetime="2023-01-23T13:23Z">3h ago</time>
 										</p>
 									</div>
 								</div>
 								<div class="absolute opacity-0 teammate-item-hover bottom-0 right-0 top-0 left-0 flex items-center justify-center gap-4 hover:bg-white dark:hover:bg-gray-800 transition duration-150 ease-in-out rounded">
-									<button class=" w-12 h-12 flex items-center justify-center whitespace-nowrap rounded-full px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal bg-info-100 text-info-600 transition duration-150 ease-in-out hover:bg-info-200 focus:bg-info-200 focus:outline-none focus:ring-0 active:bg-info-200  motion-reduce:transition-none" type="button" data-te-toggle="modal" data-te-target="#modalEditTeammate" data-te-ripple-init data-te-ripple-color="light">
+									<button class=" w-12 h-12 flex items-center justify-center whitespace-nowrap rounded-full px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal bg-info-100 text-info-600 transition duration-150 ease-in-out hover:bg-info-200 focus:bg-info-200 focus:outline-none focus:ring-0 active:bg-info-200  motion-reduce:transition-none" type="button" data-te-toggle="modal" id="btnOpenModalEditTeammate" data-username="{{ teammate.user.fullname }}" data-userId="{{ teammate.id }}" data-te-target="#modalEditTeammate" data-te-ripple-init data-te-ripple-color="light">
 										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
 											<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/>
 										</svg>
 									</button>
-									<button class=" w-12 h-12 flex items-center justify-center whitespace-nowrap rounded-full px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal bg-danger-100 text-danger-600 transition duration-150 ease-in-out hover:bg-danger-200 focus:bg-danger-200 focus:outline-none focus:ring-0 active:bg-danger-200  motion-reduce:transition-none" type="button" data-te-toggle="modal" data-te-target="#modalRemoveTeammate" data-te-ripple-init data-te-ripple-color="light">
+									<button class=" w-12 h-12 flex items-center justify-center whitespace-nowrap rounded-full px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal bg-danger-100 text-danger-600 transition duration-150 ease-in-out hover:bg-danger-200 focus:bg-danger-200 focus:outline-none focus:ring-0 active:bg-danger-200  motion-reduce:transition-none" type="button" data-te-toggle="modal" id="btnOpenModalRemoveTeammate" data-username="{{ teammate.user.fullname }}" data-userId="{{ teammate.id }}" data-te-target="#modalRemoveTeammate" data-te-ripple-init data-te-ripple-color="light">
 										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
 											<path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"/>
 										</svg>
@@ -140,18 +148,64 @@
 		</div>
 	</div>
 
-	<!--Edit Team centered modal-->
-	<div data-te-modal-init class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="modalEditTeam" tabindex="-1" aria-labelledby="modalEditTeamTitle" aria-modal="true" role="dialog">
-		<div data-te-modal-dialog-ref class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
-			<form action="{{ path('app_teams_edit', {'slug': team.slug}) }}" method="POST">
-				<input type="hidden" name="_method" value="PUT" />
-				<input type="hidden" name="token" value="{{ csrf_token('edit-team') }}" />
+	{% if team.owner.id == user.id %}
+		<!--Edit Team centered modal-->
+		<div data-te-modal-init class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="modalEditTeam" tabindex="-1" aria-labelledby="modalEditTeamTitle" aria-modal="true" role="dialog">
+			<div data-te-modal-dialog-ref class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
+				<form action="{{ path('app_teams_edit', {'slug': team.slug}) }}" method="POST">
+					<input type="hidden" name="_method" value="PUT" />
+					<input type="hidden" name="token" value="{{ csrf_token('edit-team') }}" />
+					<div class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+						<div
+							class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+							<!--Modal title-->
+							<h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="exampleModalScrollableLabel">
+								Edit team {{team.teamName}}
+							</h5>
+							<!--Close button-->
+							<button type="button" class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" data-te-modal-dismiss aria-label="Close">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+								</svg>
+							</button>
+						</div>
+
+						<!--Modal body-->
+						<div class="relative p-4">
+							<div class="">
+								<label for="team_name" class="block text-sm font-medium leading-6 text-gray-900">Team name</label>
+								<div class="mt-2">
+									<div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+										<span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm">myprojects.com/app/teams/</span>
+										<input type="text" name="team_name" id="team_name" autocomplete="team_name" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 outline-none" placeholder="New-Team-Name">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!--Modal footer-->
+						<div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+							<button type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
+								Close
+							</button>
+							<button type="submit" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
+								Save changes
+							</button>
+						</div>
+
+					</div>
+			</div>
+		</div>
+
+		<!--Add Teammate centered modal-->
+		<div data-te-modal-init class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="modalAddTeammate" tabindex="-1" aria-labelledby="modalAddTeammateTitle" aria-modal="true" role="dialog">
+			<div data-te-modal-dialog-ref class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
 				<div class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
 					<div
 						class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
 						<!--Modal title-->
 						<h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="exampleModalScrollableLabel">
-							Edit team {{team.teamName}}
+							Add new teammate
 						</h5>
 						<!--Close button-->
 						<button type="button" class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" data-te-modal-dismiss aria-label="Close">
@@ -164,195 +218,264 @@
 					<!--Modal body-->
 					<div class="relative p-4">
 						<div class="">
-							<label for="team_name" class="block text-sm font-medium leading-6 text-gray-900">Team name</label>
+							<label for="add_user_id" class="block text-sm font-medium leading-6 text-gray-900">New role</label>
 							<div class="mt-2">
-								<div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-									<span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm">myprojects.com/app/teams/</span>
-									<input type="text" name="team_name" id="team_name" autocomplete="team_name" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 outline-none" placeholder="New-Team-Name">
-								</div>
+								<select name="add_user_id" id="add_user_id" data-te-select-init data-te-select-filter="true" class="w-100">
+									{% for user in other_users %}
+										<option value="{{user.id}}">{{ user.firstName|capitalize }} {{ user.firstName|upper }} </option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+						<div class="">
+							<label for="add_user_role" class="block text-sm font-medium leading-6 text-gray-900">New role</label>
+							<div class="mt-2">
+								<select name="add_user_role" id="add_user_role" data-te-select-init data-te-select-filter="true" class="w-100">
+									<option value="admin">Master</option>
+									<option value="worker">Worker</option>
+								</select>
 							</div>
 						</div>
 					</div>
 
 					<!--Modal footer-->
-					<div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
-						<button type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
+					<div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50 gap-1">
+						<button type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
 							Close
 						</button>
-						<button type="submit" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
+						<button type="button" id="teammateAddBtn" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
 							Save changes
 						</button>
 					</div>
-
-				</div>
-		</div>
-	</div>
-
-
-	<div data-te-modal-init class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="modalEditTeammate" tabindex="-1" aria-labelledby="modalEditTeammateTitle" aria-modal="true" role="dialog">
-		<div data-te-modal-dialog-ref class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
-			<div class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
-				<div
-					class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
-					<!--Modal title-->
-					<h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="exampleModalScrollableLabel">
-						Change Leslie Alexander role
-					</h5>
-					<!--Close button-->
-					<button type="button" class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" data-te-modal-dismiss aria-label="Close">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-						</svg>
-					</button>
-				</div>
-
-				<!--Modal body-->
-				<div class="relative p-4">
-					<div class="">
-						<label for="team_name" class="block text-sm font-medium leading-6 text-gray-900">New role</label>
-						<div class="mt-2">
-							<select name="user_role" id="user_role" data-te-select-init data-te-select-filter="true" class="w-100">
-								<option value="master">Master</option>
-								<option value="worker">Worker</option>
-							</select>
-						</div>
-					</div>
-				</div>
-
-				<!--Modal footer-->
-				<div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50 gap-1">
-					<button type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
-						Close
-					</button>
-					<button type="button" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
-						Save changes
-					</button>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div data-te-modal-init class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="modalRemoveTeammate" tabindex="-1" aria-labelledby="modalRemoveTeammateTitle" aria-modal="true" role="dialog">
-		<div data-te-modal-dialog-ref class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
-			<div class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
-				<div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all  sm:w-full sm:max-w-lg">
-					<div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-						<div class="sm:flex sm:items-start">
-							<div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-								<svg class="h-6 w-6 text-red-600" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
-								</svg>
+		<!--Edit Teammate centered modal-->
+		<div data-te-modal-init class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="modalEditTeammate" tabindex="-1" aria-labelledby="modalEditTeammateTitle" aria-modal="true" role="dialog">
+			<div data-te-modal-dialog-ref class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
+				<div class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+					<div
+						class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+						<!--Modal title-->
+						<h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="editTeammateModalLabel">
+							Change xxx-xxx role
+						</h5>
+						<!--Close button-->
+						<button type="button" class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" data-te-modal-dismiss aria-label="Close">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+							</svg>
+						</button>
+					</div>
+
+					<!--Modal body-->
+					<div class="relative p-4">
+						<div class="">
+							<label for="team_name" class="block text-sm font-medium leading-6 text-gray-900">New role</label>
+							<div class="mt-2">
+								<select name="user_role" id="user_role" data-te-select-init data-te-select-filter="true" class="w-100">
+									<option value="master">Master</option>
+									<option value="worker">Worker</option>
+								</select>
 							</div>
-							<div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-								<h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Remove Alexander</h3>
-								<div class="mt-2">
-									<p class="text-sm text-gray-500">Are you sure you want to remove Alexander from this team? She is not going to access all projects of this team anymore.</p>
+						</div>
+					</div>
+
+					<!--Modal footer-->
+					<div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50 gap-1">
+						<button type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
+							Close
+						</button>
+						<button type="button" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
+							Save changes
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--Delete Teammate centered modal-->
+		<div data-te-modal-init class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="modalRemoveTeammate" tabindex="-1" aria-labelledby="modalRemoveTeammateTitle" aria-modal="true" role="dialog">
+			<div data-te-modal-dialog-ref class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
+				<div class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+					<div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all  sm:w-full sm:max-w-lg">
+						<div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+							<div class="sm:flex sm:items-start">
+								<div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+									<svg class="h-6 w-6 text-red-600" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+									</svg>
+								</div>
+								<div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+									<h3 class="text-base font-semibold leading-6 text-gray-900" id="removeTeammateModalLabel">Remove xxx-xxx</h3>
+									<div class="mt-2">
+										<p class="text-sm text-gray-500">Are you sure you want to this user from the team? This user is not going to access all projects of this team anymore.</p>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-						<button type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">Remove</button>
-						<button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto" data-te-ripple-init data-te-ripple-color="light">Cancel</button>
+						<div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+							<button type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">Remove</button>
+							<button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto" data-te-ripple-init data-te-ripple-color="light">Cancel</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<script>
-		const teamEditBtn = document.getElementById('teamEditBtn');
-		const teammateEditBtn = document.getElementById('teammateEditBtn');
-		const teammateRemoveBtn = document.getElementById('teammateRemoveBtn');
-		const token = '{{ csrf_token('edit-token') }}'
-		const toastCount = 0;
+		<script>
+			const teammateAddBtn = document.getElementById('teammateAddBtn');
+			const teammateEditBtn = document.getElementById('teammateEditBtn');
+			const teammateRemoveBtn = document.getElementById('teammateRemoveBtn');
 
-		const editUrl = '{{ path('app_teams_edit', {'slug': team.slug}) }}'
+			const openModalEditTeammateBtn = document.getElementById('btnOpenModalEditTeammate');
+			const openModalRemoveTeammateBtn = document.getElementById('btnOpenModalRemoveTeammate');
+			const token = '{{ csrf_token('teammate-token') }}'
+			const toastCount = 0;
 
-		teamEditBtn?.addEventListener('click', function(e) {
-			const team_name = document.getElementById('team_name')?.value;
-			fetch(editUrl, {
-					method: 'PUT',
-					body: {
-						token,
-						team_name
-					}
-			})
-			.then(response => response.json())
-			.then(response => {
-				toastCount++;
-				showToast(response.message);
+			const addTeammateUrl = '{{ path('app_teams_add_teammate', {'slug': team.slug}) }}'
+			const editTeammateUrl = '{{ path('app_teams_edit_teammate', {'slug': team.slug, 'id': 0}) }}'
+			const removeTeammateUrl = '{{ path('app_teams_remove_teammate', {'slug': team.slug, 'id': 0}) }}'
+
+			let teammateId = 0;
+
+			teammateAddBtn?.addEventListener('click', function(e) {
+				const userId = document.getElementById('add_user_id')?.value;
+				const userRole = document.getElementById('add_user_role')?.value;
+				fetch(addTeammateUrl, {
+						method: 'POST',
+						body: {
+							token,
+							user_id: userId,
+							user_role: userRole,
+						}
+				})
+				.then(response => response.json())
+				.then(response => {
+					toastCount++;
+					showToast(response.message);
+				});
 			});
-		});
 
-		function showToast(message) {
-			const toastContainer = document.getElementById('toast-container');
-			let icon = '<path fill="currentColor" d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"></path>'
-			if(type === 'danger')
-				icon = '<path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path>';
-			else if(type === 'warning')
-				icon = '<path fill="currentColor" d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path>';
-			else if(type === 'success')
-				icon = '<path fill="currentColor" d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path>';
-			const toast = `
-				<div
-					class="pointer-events-auto mx-auto mb-4 hidden w-96 max-w-full rounded-lg bg-${message.type}-100 bg-clip-padding text-sm text-${message.type}-700 shadow-lg shadow-black/5 data-[te-toast-show]:block data-[te-toast-hide]:hidden"
-					id="team-toast-${toastCount}"
-					role="alert"
-					aria-live="assertive"
-					aria-atomic="true"
-					data-te-autohide="true"
-					data-te-toast-init
-					data-te-toast-show>
+			openModalEditTeammateBtn?.addEventListener('click', function(e) {
+				const editTeammateModalLabel =  document.getElementById('editTeammateModalLabel');
+				console.log('e', e);
+				teammateId = e.target.getAttribute('data-userId');
+				const username = e.target.getAttribute('data-username');
+				console.log(userId, username);
+				editTeammateModalLabel.innerText = editTeammateModalLabel.innerText.replace('xxx-xxx', username)
+			});
+
+			teammateEditBtn?.addEventListener('click', function(e) {
+				const userRole = document.getElementById('edit_user_role')?.value;
+				fetch(editTeammateUrl.replace('0', teammateId), {
+						method: 'PUT',
+						body: {
+							token,
+							user_role: userRole,
+						}
+				})
+				.then(response => response.json())
+				.then(response => {
+					toastCount++;
+					showToast(response.message);
+				});
+			});
+
+			openModalRemoveTeammateBtn?.addEventListener('click', function(e) {
+				const editTeammateModalLabel =  document.getElementById('removeTeammateModalLabel');
+				console.log('e', e);
+				teammateId = e.target.getAttribute('data-userId');
+				const username = e.target.getAttribute('data-username');
+				console.log(userId, username);
+				editTeammateModalLabel.innerText = editTeammateModalLabel.innerText.replace('xxx-xxx', username)
+			});
+
+			teammateRemoveBtn?.addEventListener('click', function(e) {
+				fetch(removeTeammateUrl.replace('0', teammateId), {
+						method: 'DELETE',
+						body: {
+							token
+						}
+				})
+				.then(response => response.json())
+				.then(response => {
+					toastCount++;
+					showToast(response.message);
+				});
+			});
+
+			function showToast(message) {
+				const toastContainer = document.getElementById('toast-container');
+				let icon = '<path fill="currentColor" d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"></path>'
+				if(type === 'danger')
+					icon = '<path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path>';
+				else if(type === 'warning')
+					icon = '<path fill="currentColor" d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path>';
+				else if(type === 'success')
+					icon = '<path fill="currentColor" d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path>';
+				const toast = `
 					<div
-						class="flex items-center justify-between rounded-t-lg border-b-2 border-${message.type}-200 bg-${message.type}-100 bg-clip-padding px-4 pb-2 pt-2.5 text-${message.type}-700">
-						<p class="flex items-center font-bold text-${message.type}-700">
-						<svg
-							aria-hidden="true"
-							focusable="true"
-							data-prefix="fas"
-							data-icon="info-circle"
-							class="mr-2 h-4 w-4 fill-current"
-							role="img"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 512 512">
-							${icon}
-						</svg>
-						${message.title}
-						</p>
-						<div class="flex items-center">
-						<button
-							type="button"
-							class="ml-2 box-content rounded-none border-none opacity-80 hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-							data-te-toast-dismiss
-							aria-label="Close">
-							<span
-							class="w-[1em] focus:opacity-100 disabled:pointer-events-none disabled:select-none disabled:opacity-25 [&.disabled]:pointer-events-none [&.disabled]:select-none [&.disabled]:opacity-25">
+						class="pointer-events-auto mx-auto mb-4 hidden w-96 max-w-full rounded-lg bg-${message.type}-100 bg-clip-padding text-sm text-${message.type}-700 shadow-lg shadow-black/5 data-[te-toast-show]:block data-[te-toast-hide]:hidden"
+						id="team-toast-${toastCount}"
+						role="alert"
+						aria-live="assertive"
+						aria-atomic="true"
+						data-te-autohide="true"
+						data-te-toast-init
+						data-te-toast-show>
+						<div
+							class="flex items-center justify-between rounded-t-lg border-b-2 border-${message.type}-200 bg-${message.type}-100 bg-clip-padding px-4 pb-2 pt-2.5 text-${message.type}-700">
+							<p class="flex items-center font-bold text-${message.type}-700">
 							<svg
+								aria-hidden="true"
+								focusable="true"
+								data-prefix="fas"
+								data-icon="info-circle"
+								class="mr-2 h-4 w-4 fill-current"
+								role="img"
 								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								class="h-6 w-6">
-								<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M6 18L18 6M6 6l12 12" />
+								viewBox="0 0 512 512">
+								${icon}
 							</svg>
-							</span>
-						</button>
+							${message.title}
+							</p>
+							<div class="flex items-center">
+							<button
+								type="button"
+								class="ml-2 box-content rounded-none border-none opacity-80 hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+								data-te-toast-dismiss
+								aria-label="Close">
+								<span
+								class="w-[1em] focus:opacity-100 disabled:pointer-events-none disabled:select-none disabled:opacity-25 [&.disabled]:pointer-events-none [&.disabled]:select-none [&.disabled]:opacity-25">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="h-6 w-6">
+									<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M6 18L18 6M6 6l12 12" />
+								</svg>
+								</span>
+							</button>
+							</div>
+						</div>
+						<div
+							class="break-words rounded-b-lg bg-${message.type}-100 px-4 py-4 text-${message.type}-700">
+							${message.message}
 						</div>
 					</div>
-					<div
-						class="break-words rounded-b-lg bg-${message.type}-100 px-4 py-4 text-${message.type}-700">
-						${message.message}
-					</div>
-				</div>
-			`;
+				`;
 
-			toastContainer.append(toast);
-		}
-	</script>
+				toastContainer.append(toast);
+			}
+		</script>
+
+	{% endif %}
 
 {% endblock %}

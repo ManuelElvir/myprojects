@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +38,44 @@ class UserRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * Find all users which are not in the specified team.
+     * @return User[]
+     */
+    public function findExcludingTeam(
+        int $teamId,
+        array $filters = [], 
+        ?string $orderBy = 'createdAt',
+        ?string $orderDirection = 'desc',
+        int $limit = null,
+        int $offset = null
+        ): array
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->leftJoin('u.teammates', 'tm');
+        $qb->leftJoin('tm.team', 't', Expr\Join::WITH, "t.id != $teamId");
+        $qb->where("1 = 1");
+
+        foreach ($filters as $filter) {
+            $qb->andWhere($filter);
+        }
+        if(!$orderBy || strpos($orderBy, 'p.') === false) {
+            $orderBy = 'p.createdAt';
+        }
+        if(!$orderDirection){
+            $orderDirection = 'desc';
+        }
+        $qb->orderBy($orderBy, $orderDirection);
+        if($limit) {
+            $qb->setMaxResults($limit);
+        }
+        if($offset) {
+            $qb->setFirstResult($offset);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
 //    /**

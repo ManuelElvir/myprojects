@@ -2,6 +2,9 @@
 
 namespace App\Service;
 
+use App\Entity\Team;
+use App\Entity\User;
+use App\Repository\TeammateRepository;
 use App\Repository\TeamRepository;
 
 /**
@@ -10,7 +13,9 @@ use App\Repository\TeamRepository;
  * */
 final class TeamService
 {
-    public function __construct(private TeamRepository $teamRepository)
+    public function __construct(
+        private TeamRepository $teamRepository, 
+        private TeammateRepository $teammateRepository )
     {
         
     }
@@ -64,6 +69,26 @@ final class TeamService
             return true;
         }
         
+        return false;
+    }
+
+    /**
+     * check if a user is already in the team
+     * 
+     * @param int $userId
+     * @param int $teamId
+     * @return boolean
+     */
+    public function checkIfUserIsATeam(int $teamId, int $userId) {
+        $teammate = $this->teammateRepository->findOneBy(
+            array(
+                'user_id' => $userId,
+                'team_id' => $teamId
+            )
+        );
+        if($teammate) {
+            return true;
+        }
         return false;
     }
 }
